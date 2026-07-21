@@ -2,7 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Refurbishment quotation and cost engineering system."
+  >
 
   <title>Refurbishment Quote System</title>
 
@@ -10,23 +19,2720 @@
 </head>
 
 <body>
-  <main class="startup-screen">
-    <section class="startup-card">
-      <div class="logo-mark">RQ</div>
+  <div class="app-shell" id="app-shell">
 
-      <p class="eyebrow">REFURBISHMENT COST ENGINEERING</p>
+    <!-- =====================================================
+         LEFT SIDEBAR
+    ====================================================== -->
+    <aside class="sidebar" id="sidebar">
 
-      <h1>Refurbishment Quote System</h1>
+      <div class="sidebar-header">
+        <button
+          class="brand-button"
+          id="brand-button"
+          type="button"
+          data-page-target="dashboard"
+          aria-label="Open dashboard"
+        >
+          <span class="brand-logo">RQ</span>
 
-      <p id="system-status">
-        Preparing the quotation workspace…
-      </p>
+          <span class="brand-text">
+            <strong>Refurb Quote</strong>
+            <small>Cost Engineering</small>
+          </span>
+        </button>
 
-      <button id="start-button" type="button">
-        Open System
-      </button>
+        <button
+          class="icon-button sidebar-collapse-button"
+          id="sidebar-collapse-button"
+          type="button"
+          aria-label="Collapse sidebar"
+          title="Collapse sidebar"
+        >
+          <span aria-hidden="true">☰</span>
+        </button>
+      </div>
+
+      <div class="sidebar-primary-action">
+        <button
+          class="new-quote-button"
+          id="new-quote-button"
+          type="button"
+        >
+          <span class="button-icon" aria-hidden="true">＋</span>
+          <span class="button-label">New Quote</span>
+        </button>
+      </div>
+
+      <nav class="main-navigation" aria-label="Main navigation">
+        <button
+          class="nav-item active"
+          type="button"
+          data-page-target="dashboard"
+        >
+          <span class="nav-icon" aria-hidden="true">⌂</span>
+          <span class="nav-label">Dashboard</span>
+        </button>
+
+        <button
+          class="nav-item"
+          type="button"
+          data-page-target="projects"
+        >
+          <span class="nav-icon" aria-hidden="true">▣</span>
+          <span class="nav-label">Projects</span>
+
+          <span class="nav-count" id="projects-nav-count">
+            4
+          </span>
+        </button>
+
+        <button
+          class="nav-item"
+          type="button"
+          data-page-target="cost-pool"
+        >
+          <span class="nav-icon" aria-hidden="true">◇</span>
+          <span class="nav-label">Cost Pool</span>
+        </button>
+
+        <button
+          class="nav-item"
+          type="button"
+          data-page-target="templates"
+        >
+          <span class="nav-icon" aria-hidden="true">▤</span>
+          <span class="nav-label">Templates</span>
+        </button>
+
+        <button
+          class="nav-item"
+          type="button"
+          data-page-target="customers"
+        >
+          <span class="nav-icon" aria-hidden="true">♙</span>
+          <span class="nav-label">Customers</span>
+        </button>
+
+        <button
+          class="nav-item"
+          type="button"
+          data-page-target="reports"
+        >
+          <span class="nav-icon" aria-hidden="true">▥</span>
+          <span class="nav-label">Reports</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-section recent-projects-section">
+        <div class="sidebar-section-heading">
+          <span class="sidebar-section-title">Recent Projects</span>
+
+          <button
+            class="small-icon-button"
+            id="view-all-projects-button"
+            type="button"
+            aria-label="View all projects"
+            title="View all projects"
+          >
+            ›
+          </button>
+        </div>
+
+        <div
+          class="recent-project-list"
+          id="recent-project-list"
+        >
+          <button
+            class="recent-project-item"
+            type="button"
+            data-project-id="project-tineco-s7"
+          >
+            <span class="recent-project-status status-draft"></span>
+
+            <span class="recent-project-content">
+              <strong>Tineco S7</strong>
+              <small>Draft quote</small>
+            </span>
+          </button>
+
+          <button
+            class="recent-project-item"
+            type="button"
+            data-project-id="project-dyson-v15"
+          >
+            <span class="recent-project-status status-review"></span>
+
+            <span class="recent-project-content">
+              <strong>Dyson V15</strong>
+              <small>Under review</small>
+            </span>
+          </button>
+
+          <button
+            class="recent-project-item"
+            type="button"
+            data-project-id="project-shark-detect"
+          >
+            <span class="recent-project-status status-approved"></span>
+
+            <span class="recent-project-content">
+              <strong>Shark Detect</strong>
+              <small>Approved</small>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <button
+          class="nav-item"
+          type="button"
+          data-page-target="settings"
+        >
+          <span class="nav-icon" aria-hidden="true">⚙</span>
+          <span class="nav-label">Settings</span>
+        </button>
+
+        <button
+          class="user-profile-button"
+          id="user-profile-button"
+          type="button"
+        >
+          <span class="user-avatar">AO</span>
+
+          <span class="user-profile-text">
+            <strong>Alger</strong>
+            <small>Administrator</small>
+          </span>
+
+          <span class="user-profile-menu-icon" aria-hidden="true">
+            ⋯
+          </span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- =====================================================
+         MOBILE SIDEBAR OVERLAY
+    ====================================================== -->
+    <button
+      class="sidebar-overlay"
+      id="sidebar-overlay"
+      type="button"
+      aria-label="Close sidebar"
+    ></button>
+
+    <!-- =====================================================
+         MAIN APPLICATION AREA
+    ====================================================== -->
+    <div class="main-area">
+
+      <!-- ===================================================
+           TOP HEADER
+      ==================================================== -->
+      <header class="top-header">
+        <div class="top-header-left">
+          <button
+            class="icon-button mobile-menu-button"
+            id="mobile-menu-button"
+            type="button"
+            aria-label="Open sidebar"
+            title="Open sidebar"
+          >
+            ☰
+          </button>
+
+          <div class="page-title-group">
+            <p class="page-eyebrow" id="page-eyebrow">
+              WORKSPACE
+            </p>
+
+            <h1 class="page-title" id="page-title">
+              Dashboard
+            </h1>
+          </div>
+        </div>
+
+        <div class="top-header-actions">
+          <div class="global-search-wrapper">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+
+            <input
+              class="global-search-input"
+              id="global-search-input"
+              type="search"
+              placeholder="Search projects, costs, templates..."
+              autocomplete="off"
+              aria-label="Search the system"
+            >
+
+            <kbd class="search-shortcut">Ctrl K</kbd>
+          </div>
+
+          <button
+            class="icon-button"
+            id="theme-toggle-button"
+            type="button"
+            aria-label="Toggle theme"
+            title="Toggle theme"
+          >
+            <span id="theme-toggle-icon" aria-hidden="true">☾</span>
+          </button>
+
+          <button
+            class="icon-button notification-button"
+            id="notification-button"
+            type="button"
+            aria-label="Open notifications"
+            title="Notifications"
+          >
+            <span aria-hidden="true">♢</span>
+            <span class="notification-dot"></span>
+          </button>
+        </div>
+      </header>
+
+      <!-- ===================================================
+           PAGE CONTENT
+      ==================================================== -->
+      <main class="page-container">
+
+        <!-- =================================================
+             DASHBOARD PAGE
+        ================================================== -->
+        <section
+          class="app-page active"
+          id="dashboard-page"
+          data-page="dashboard"
+        >
+          <div class="page-intro-row">
+            <div>
+              <p class="section-kicker">OVERVIEW</p>
+
+              <h2>Good evening, Alger</h2>
+
+              <p class="section-description">
+                Review your active refurbishment projects, quote
+                performance and recent costing activity.
+              </p>
+            </div>
+
+            <div class="page-intro-actions">
+              <button
+                class="secondary-button"
+                id="import-project-button"
+                type="button"
+              >
+                <span aria-hidden="true">⇧</span>
+                Import
+              </button>
+
+              <button
+                class="primary-button"
+                id="dashboard-create-quote-button"
+                type="button"
+              >
+                <span aria-hidden="true">＋</span>
+                Create Quote
+              </button>
+            </div>
+          </div>
+
+          <!-- Dashboard KPI cards -->
+          <div class="stats-grid">
+
+            <article class="stat-card">
+              <div class="stat-card-header">
+                <span class="stat-icon stat-icon-projects">▣</span>
+
+                <span class="stat-change positive">
+                  +2 this month
+                </span>
+              </div>
+
+              <p class="stat-label">Active Projects</p>
+
+              <strong class="stat-value" id="active-projects-value">
+                4
+              </strong>
+
+              <p class="stat-note">
+                Across three customers
+              </p>
+            </article>
+
+            <article class="stat-card">
+              <div class="stat-card-header">
+                <span class="stat-icon stat-icon-drafts">✎</span>
+
+                <span class="stat-change neutral">
+                  3 pending
+                </span>
+              </div>
+
+              <p class="stat-label">Draft Quotes</p>
+
+              <strong class="stat-value" id="draft-quotes-value">
+                3
+              </strong>
+
+              <p class="stat-note">
+                Awaiting final review
+              </p>
+            </article>
+
+            <article class="stat-card">
+              <div class="stat-card-header">
+                <span class="stat-icon stat-icon-margin">%</span>
+
+                <span class="stat-change positive">
+                  +1.8%
+                </span>
+              </div>
+
+              <p class="stat-label">Average Margin</p>
+
+              <strong class="stat-value" id="average-margin-value">
+                27.4%
+              </strong>
+
+              <p class="stat-note">
+                Based on current quotes
+              </p>
+            </article>
+
+            <article class="stat-card">
+              <div class="stat-card-header">
+                <span class="stat-icon stat-icon-value">$</span>
+
+                <span class="stat-change positive">
+                  +12.6%
+                </span>
+              </div>
+
+              <p class="stat-label">Monthly Quoted Value</p>
+
+              <strong class="stat-value" id="monthly-quoted-value">
+                $148,600
+              </strong>
+
+              <p class="stat-note">
+                Estimated monthly revenue
+              </p>
+            </article>
+          </div>
+
+          <div class="dashboard-grid">
+
+            <!-- Recent projects panel -->
+            <section class="content-panel dashboard-projects-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">PROJECT PIPELINE</p>
+                  <h3>Recent Projects</h3>
+                </div>
+
+                <button
+                  class="text-button"
+                  type="button"
+                  data-page-target="projects"
+                >
+                  View all
+                  <span aria-hidden="true">→</span>
+                </button>
+              </div>
+
+              <div class="project-table-wrapper">
+                <table class="data-table project-table">
+                  <thead>
+                    <tr>
+                      <th>Project</th>
+                      <th>Customer</th>
+                      <th>Status</th>
+                      <th>Volume</th>
+                      <th>Unit Price</th>
+                      <th>Margin</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+
+                  <tbody id="dashboard-project-table-body">
+                    <tr>
+                      <td>
+                        <button
+                          class="table-project-button"
+                          type="button"
+                          data-project-id="project-tineco-s7"
+                        >
+                          <span class="project-avatar">T7</span>
+
+                          <span>
+                            <strong>Tineco S7 Refurbishment</strong>
+                            <small>Updated today</small>
+                          </span>
+                        </button>
+                      </td>
+
+                      <td>Tineco</td>
+
+                      <td>
+                        <span class="status-badge draft">
+                          Draft
+                        </span>
+                      </td>
+
+                      <td>500 / month</td>
+                      <td>$81.00</td>
+                      <td>27.4%</td>
+
+                      <td>
+                        <button
+                          class="row-menu-button"
+                          type="button"
+                          aria-label="Project options"
+                        >
+                          ⋯
+                        </button>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <button
+                          class="table-project-button"
+                          type="button"
+                          data-project-id="project-dyson-v15"
+                        >
+                          <span class="project-avatar">D15</span>
+
+                          <span>
+                            <strong>Dyson V15 Refurbishment</strong>
+                            <small>Updated yesterday</small>
+                          </span>
+                        </button>
+                      </td>
+
+                      <td>Dyson</td>
+
+                      <td>
+                        <span class="status-badge review">
+                          Review
+                        </span>
+                      </td>
+
+                      <td>300 / month</td>
+                      <td>$94.50</td>
+                      <td>25.2%</td>
+
+                      <td>
+                        <button
+                          class="row-menu-button"
+                          type="button"
+                          aria-label="Project options"
+                        >
+                          ⋯
+                        </button>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <button
+                          class="table-project-button"
+                          type="button"
+                          data-project-id="project-shark-detect"
+                        >
+                          <span class="project-avatar">SD</span>
+
+                          <span>
+                            <strong>Shark Detect Repair Program</strong>
+                            <small>Updated July 17</small>
+                          </span>
+                        </button>
+                      </td>
+
+                      <td>SharkNinja</td>
+
+                      <td>
+                        <span class="status-badge approved">
+                          Approved
+                        </span>
+                      </td>
+
+                      <td>800 / month</td>
+                      <td>$69.80</td>
+                      <td>29.8%</td>
+
+                      <td>
+                        <button
+                          class="row-menu-button"
+                          type="button"
+                          aria-label="Project options"
+                        >
+                          ⋯
+                        </button>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <button
+                          class="table-project-button"
+                          type="button"
+                          data-project-id="project-bulk-inspection"
+                        >
+                          <span class="project-avatar">BI</span>
+
+                          <span>
+                            <strong>Bulk Return Inspection</strong>
+                            <small>Updated July 15</small>
+                          </span>
+                        </button>
+                      </td>
+
+                      <td>Northstar Retail</td>
+
+                      <td>
+                        <span class="status-badge draft">
+                          Draft
+                        </span>
+                      </td>
+
+                      <td>1,500 / batch</td>
+                      <td>$16.20</td>
+                      <td>22.6%</td>
+
+                      <td>
+                        <button
+                          class="row-menu-button"
+                          type="button"
+                          aria-label="Project options"
+                        >
+                          ⋯
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- Quick actions -->
+            <aside class="content-panel quick-actions-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">SHORTCUTS</p>
+                  <h3>Quick Actions</h3>
+                </div>
+              </div>
+
+              <div class="quick-action-list">
+                <button
+                  class="quick-action-card"
+                  id="quick-new-project-button"
+                  type="button"
+                >
+                  <span class="quick-action-icon">＋</span>
+
+                  <span class="quick-action-content">
+                    <strong>New Project</strong>
+                    <small>Start a blank customer quote</small>
+                  </span>
+
+                  <span class="quick-action-arrow">→</span>
+                </button>
+
+                <button
+                  class="quick-action-card"
+                  type="button"
+                  data-page-target="cost-pool"
+                >
+                  <span class="quick-action-icon">◇</span>
+
+                  <span class="quick-action-content">
+                    <strong>Add Cost Item</strong>
+                    <small>Expand your reusable cost pool</small>
+                  </span>
+
+                  <span class="quick-action-arrow">→</span>
+                </button>
+
+                <button
+                  class="quick-action-card"
+                  type="button"
+                  data-page-target="templates"
+                >
+                  <span class="quick-action-icon">▤</span>
+
+                  <span class="quick-action-content">
+                    <strong>Create Template</strong>
+                    <small>Build a reusable SOP workflow</small>
+                  </span>
+
+                  <span class="quick-action-arrow">→</span>
+                </button>
+
+                <button
+                  class="quick-action-card"
+                  id="backup-data-button"
+                  type="button"
+                >
+                  <span class="quick-action-icon">⇩</span>
+
+                  <span class="quick-action-content">
+                    <strong>Back Up Data</strong>
+                    <small>Export a complete JSON backup</small>
+                  </span>
+
+                  <span class="quick-action-arrow">→</span>
+                </button>
+              </div>
+            </aside>
+          </div>
+
+          <!-- Cost distribution -->
+          <section class="content-panel dashboard-cost-panel">
+            <div class="panel-header">
+              <div>
+                <p class="panel-kicker">COST ANALYSIS</p>
+                <h3>Current Cost Distribution</h3>
+              </div>
+
+              <select
+                class="compact-select"
+                id="dashboard-cost-project-select"
+                aria-label="Select project"
+              >
+                <option value="project-tineco-s7">
+                  Tineco S7 Refurbishment
+                </option>
+
+                <option value="project-dyson-v15">
+                  Dyson V15 Refurbishment
+                </option>
+
+                <option value="project-shark-detect">
+                  Shark Detect Repair Program
+                </option>
+              </select>
+            </div>
+
+            <div class="cost-distribution-layout">
+              <div
+                class="cost-donut-placeholder"
+                aria-label="Cost distribution chart"
+              >
+                <div class="cost-donut-center">
+                  <small>Total Cost</small>
+                  <strong>$58.80</strong>
+                  <span>per unit</span>
+                </div>
+              </div>
+
+              <div class="cost-legend">
+                <div class="cost-legend-item">
+                  <span class="legend-dot labour"></span>
+
+                  <span class="legend-label">
+                    Labour
+                  </span>
+
+                  <strong>$21.60</strong>
+                  <span>36.7%</span>
+                </div>
+
+                <div class="cost-legend-item">
+                  <span class="legend-dot parts"></span>
+
+                  <span class="legend-label">
+                    Parts
+                  </span>
+
+                  <strong>$17.00</strong>
+                  <span>28.9%</span>
+                </div>
+
+                <div class="cost-legend-item">
+                  <span class="legend-dot logistics"></span>
+
+                  <span class="legend-label">
+                    Logistics
+                  </span>
+
+                  <strong>$9.50</strong>
+                  <span>16.2%</span>
+                </div>
+
+                <div class="cost-legend-item">
+                  <span class="legend-dot packaging"></span>
+
+                  <span class="legend-label">
+                    Packaging
+                  </span>
+
+                  <strong>$4.10</strong>
+                  <span>7.0%</span>
+                </div>
+
+                <div class="cost-legend-item">
+                  <span class="legend-dot overhead"></span>
+
+                  <span class="legend-label">
+                    Overhead
+                  </span>
+
+                  <strong>$6.60</strong>
+                  <span>11.2%</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- =================================================
+             PROJECTS PAGE
+        ================================================== -->
+        <section
+          class="app-page"
+          id="projects-page"
+          data-page="projects"
+        >
+          <div class="page-intro-row">
+            <div>
+              <p class="section-kicker">PROJECT MANAGEMENT</p>
+              <h2>Projects</h2>
+
+              <p class="section-description">
+                Create, review and update refurbishment quotation
+                projects.
+              </p>
+            </div>
+
+            <button
+              class="primary-button"
+              id="projects-create-project-button"
+              type="button"
+            >
+              <span aria-hidden="true">＋</span>
+              New Project
+            </button>
+          </div>
+
+          <div class="toolbar">
+            <div class="toolbar-search">
+              <span aria-hidden="true">⌕</span>
+
+              <input
+                id="project-search-input"
+                type="search"
+                placeholder="Search projects..."
+                aria-label="Search projects"
+              >
+            </div>
+
+            <div class="toolbar-actions">
+              <select
+                class="filter-select"
+                id="project-status-filter"
+                aria-label="Filter project status"
+              >
+                <option value="all">All statuses</option>
+                <option value="draft">Draft</option>
+                <option value="review">Under review</option>
+                <option value="approved">Approved</option>
+                <option value="archived">Archived</option>
+              </select>
+
+              <select
+                class="filter-select"
+                id="project-sort-select"
+                aria-label="Sort projects"
+              >
+                <option value="updated-desc">Recently updated</option>
+                <option value="name-asc">Project name</option>
+                <option value="value-desc">Highest value</option>
+                <option value="margin-desc">Highest margin</option>
+              </select>
+
+              <button
+                class="secondary-button icon-text-button"
+                id="project-view-toggle"
+                type="button"
+              >
+                <span aria-hidden="true">▦</span>
+                Grid
+              </button>
+            </div>
+          </div>
+
+          <div class="project-card-grid" id="project-card-grid">
+
+            <article
+              class="project-card"
+              data-project-card
+              data-status="draft"
+            >
+              <div class="project-card-top">
+                <span class="project-card-avatar">T7</span>
+
+                <button
+                  class="row-menu-button"
+                  type="button"
+                  aria-label="Project options"
+                >
+                  ⋯
+                </button>
+              </div>
+
+              <div class="project-card-body">
+                <span class="status-badge draft">Draft</span>
+
+                <h3>Tineco S7 Refurbishment</h3>
+
+                <p>
+                  Full refurbishment program including diagnosis,
+                  repair, QC and repacking.
+                </p>
+              </div>
+
+              <dl class="project-metrics">
+                <div>
+                  <dt>Customer</dt>
+                  <dd>Tineco</dd>
+                </div>
+
+                <div>
+                  <dt>Volume</dt>
+                  <dd>500 / month</dd>
+                </div>
+
+                <div>
+                  <dt>Unit Price</dt>
+                  <dd>$81.00</dd>
+                </div>
+
+                <div>
+                  <dt>Margin</dt>
+                  <dd>27.4%</dd>
+                </div>
+              </dl>
+
+              <div class="project-card-footer">
+                <span>Updated today</span>
+
+                <button
+                  class="text-button"
+                  type="button"
+                  data-project-id="project-tineco-s7"
+                >
+                  Open
+                  <span aria-hidden="true">→</span>
+                </button>
+              </div>
+            </article>
+
+            <article
+              class="project-card"
+              data-project-card
+              data-status="review"
+            >
+              <div class="project-card-top">
+                <span class="project-card-avatar">D15</span>
+
+                <button
+                  class="row-menu-button"
+                  type="button"
+                  aria-label="Project options"
+                >
+                  ⋯
+                </button>
+              </div>
+
+              <div class="project-card-body">
+                <span class="status-badge review">
+                  Under Review
+                </span>
+
+                <h3>Dyson V15 Refurbishment</h3>
+
+                <p>
+                  Premium vacuum refurbishment with battery testing
+                  and cosmetic grading.
+                </p>
+              </div>
+
+              <dl class="project-metrics">
+                <div>
+                  <dt>Customer</dt>
+                  <dd>Dyson</dd>
+                </div>
+
+                <div>
+                  <dt>Volume</dt>
+                  <dd>300 / month</dd>
+                </div>
+
+                <div>
+                  <dt>Unit Price</dt>
+                  <dd>$94.50</dd>
+                </div>
+
+                <div>
+                  <dt>Margin</dt>
+                  <dd>25.2%</dd>
+                </div>
+              </dl>
+
+              <div class="project-card-footer">
+                <span>Updated yesterday</span>
+
+                <button
+                  class="text-button"
+                  type="button"
+                  data-project-id="project-dyson-v15"
+                >
+                  Open
+                  <span aria-hidden="true">→</span>
+                </button>
+              </div>
+            </article>
+
+            <article
+              class="project-card"
+              data-project-card
+              data-status="approved"
+            >
+              <div class="project-card-top">
+                <span class="project-card-avatar">SD</span>
+
+                <button
+                  class="row-menu-button"
+                  type="button"
+                  aria-label="Project options"
+                >
+                  ⋯
+                </button>
+              </div>
+
+              <div class="project-card-body">
+                <span class="status-badge approved">
+                  Approved
+                </span>
+
+                <h3>Shark Detect Repair Program</h3>
+
+                <p>
+                  Repair and reassembly program with functional
+                  testing and outbound preparation.
+                </p>
+              </div>
+
+              <dl class="project-metrics">
+                <div>
+                  <dt>Customer</dt>
+                  <dd>SharkNinja</dd>
+                </div>
+
+                <div>
+                  <dt>Volume</dt>
+                  <dd>800 / month</dd>
+                </div>
+
+                <div>
+                  <dt>Unit Price</dt>
+                  <dd>$69.80</dd>
+                </div>
+
+                <div>
+                  <dt>Margin</dt>
+                  <dd>29.8%</dd>
+                </div>
+              </dl>
+
+              <div class="project-card-footer">
+                <span>Updated July 17</span>
+
+                <button
+                  class="text-button"
+                  type="button"
+                  data-project-id="project-shark-detect"
+                >
+                  Open
+                  <span aria-hidden="true">→</span>
+                </button>
+              </div>
+            </article>
+
+            <article
+              class="project-card"
+              data-project-card
+              data-status="draft"
+            >
+              <div class="project-card-top">
+                <span class="project-card-avatar">BI</span>
+
+                <button
+                  class="row-menu-button"
+                  type="button"
+                  aria-label="Project options"
+                >
+                  ⋯
+                </button>
+              </div>
+
+              <div class="project-card-body">
+                <span class="status-badge draft">Draft</span>
+
+                <h3>Bulk Return Inspection</h3>
+
+                <p>
+                  Inspection-only program for bulk retail returns
+                  with grading and disposition reporting.
+                </p>
+              </div>
+
+              <dl class="project-metrics">
+                <div>
+                  <dt>Customer</dt>
+                  <dd>Northstar Retail</dd>
+                </div>
+
+                <div>
+                  <dt>Volume</dt>
+                  <dd>1,500 / batch</dd>
+                </div>
+
+                <div>
+                  <dt>Unit Price</dt>
+                  <dd>$16.20</dd>
+                </div>
+
+                <div>
+                  <dt>Margin</dt>
+                  <dd>22.6%</dd>
+                </div>
+              </dl>
+
+              <div class="project-card-footer">
+                <span>Updated July 15</span>
+
+                <button
+                  class="text-button"
+                  type="button"
+                  data-project-id="project-bulk-inspection"
+                >
+                  Open
+                  <span aria-hidden="true">→</span>
+                </button>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- =================================================
+             COST POOL PAGE
+        ================================================== -->
+        <section
+          class="app-page"
+          id="cost-pool-page"
+          data-page="cost-pool"
+        >
+          <div class="page-intro-row">
+            <div>
+              <p class="section-kicker">REUSABLE COST LIBRARY</p>
+              <h2>Cost Pool</h2>
+
+              <p class="section-description">
+                Manage reusable labour, material, packaging,
+                logistics and overhead costs.
+              </p>
+            </div>
+
+            <div class="page-intro-actions">
+              <button
+                class="secondary-button"
+                id="add-cost-category-button"
+                type="button"
+              >
+                <span aria-hidden="true">＋</span>
+                New Category
+              </button>
+
+              <button
+                class="primary-button"
+                id="add-cost-item-button"
+                type="button"
+              >
+                <span aria-hidden="true">＋</span>
+                Add Cost Item
+              </button>
+            </div>
+          </div>
+
+          <div class="cost-pool-layout">
+
+            <aside class="content-panel category-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">FILTER</p>
+                  <h3>Categories</h3>
+                </div>
+              </div>
+
+              <div
+                class="category-list"
+                id="cost-category-list"
+              >
+                <button
+                  class="category-item active"
+                  type="button"
+                  data-cost-category="all"
+                >
+                  <span class="category-icon">▦</span>
+                  <span class="category-name">All Costs</span>
+                  <span class="category-count">12</span>
+                </button>
+
+                <button
+                  class="category-item"
+                  type="button"
+                  data-cost-category="labour"
+                >
+                  <span class="category-icon category-labour">L</span>
+                  <span class="category-name">Labour</span>
+                  <span class="category-count">4</span>
+                </button>
+
+                <button
+                  class="category-item"
+                  type="button"
+                  data-cost-category="parts"
+                >
+                  <span class="category-icon category-parts">P</span>
+                  <span class="category-name">Parts</span>
+                  <span class="category-count">2</span>
+                </button>
+
+                <button
+                  class="category-item"
+                  type="button"
+                  data-cost-category="packaging"
+                >
+                  <span class="category-icon category-packaging">PK</span>
+                  <span class="category-name">Packaging</span>
+                  <span class="category-count">2</span>
+                </button>
+
+                <button
+                  class="category-item"
+                  type="button"
+                  data-cost-category="logistics"
+                >
+                  <span class="category-icon category-logistics">LG</span>
+                  <span class="category-name">Logistics</span>
+                  <span class="category-count">1</span>
+                </button>
+
+                <button
+                  class="category-item"
+                  type="button"
+                  data-cost-category="equipment"
+                >
+                  <span class="category-icon category-equipment">E</span>
+                  <span class="category-name">Equipment</span>
+                  <span class="category-count">1</span>
+                </button>
+
+                <button
+                  class="category-item"
+                  type="button"
+                  data-cost-category="overhead"
+                >
+                  <span class="category-icon category-overhead">O</span>
+                  <span class="category-name">Overhead</span>
+                  <span class="category-count">2</span>
+                </button>
+              </div>
+            </aside>
+
+            <section class="content-panel cost-items-panel">
+              <div class="panel-toolbar">
+                <div class="toolbar-search">
+                  <span aria-hidden="true">⌕</span>
+
+                  <input
+                    id="cost-pool-search-input"
+                    type="search"
+                    placeholder="Search cost items..."
+                    aria-label="Search cost items"
+                  >
+                </div>
+
+                <div class="toolbar-actions">
+                  <select
+                    class="filter-select"
+                    id="cost-type-filter"
+                    aria-label="Filter cost type"
+                  >
+                    <option value="all">All cost types</option>
+                    <option value="hourly">Hourly</option>
+                    <option value="per-unit">Per unit</option>
+                    <option value="fixed">Fixed</option>
+                    <option value="percentage">Percentage</option>
+                  </select>
+
+                  <button
+                    class="secondary-button icon-text-button"
+                    id="cost-view-toggle"
+                    type="button"
+                  >
+                    <span aria-hidden="true">▦</span>
+                    Cards
+                  </button>
+                </div>
+              </div>
+
+              <div
+                class="cost-card-grid"
+                id="cost-card-grid"
+              >
+                <article
+                  class="cost-card"
+                  data-cost-card
+                  data-category="labour"
+                  data-cost-type="hourly"
+                >
+                  <div class="cost-card-header">
+                    <span class="cost-card-category labour">
+                      Labour
+                    </span>
+
+                    <button
+                      class="row-menu-button"
+                      type="button"
+                      aria-label="Cost item options"
+                    >
+                      ⋯
+                    </button>
+                  </div>
+
+                  <div class="cost-card-main">
+                    <span class="cost-card-icon labour">OP</span>
+
+                    <div>
+                      <h3>Operator Labour</h3>
+                      <p>Production and refurbishment operator.</p>
+                    </div>
+                  </div>
+
+                  <dl class="cost-card-details">
+                    <div>
+                      <dt>Rate</dt>
+                      <dd>$28.00 / hour</dd>
+                    </div>
+
+                    <div>
+                      <dt>Default Time</dt>
+                      <dd>12 minutes</dd>
+                    </div>
+                  </dl>
+
+                  <div class="cost-card-footer">
+                    <span>Updated July 10</span>
+
+                    <button
+                      class="text-button edit-cost-button"
+                      type="button"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                </article>
+
+                <article
+                  class="cost-card"
+                  data-cost-card
+                  data-category="labour"
+                  data-cost-type="hourly"
+                >
+                  <div class="cost-card-header">
+                    <span class="cost-card-category labour">
+                      Labour
+                    </span>
+
+                    <button
+                      class="row-menu-button"
+                      type="button"
+                      aria-label="Cost item options"
+                    >
+                      ⋯
+                    </button>
+                  </div>
+
+                  <div class="cost-card-main">
+                    <span class="cost-card-icon labour">EN</span>
+
+                    <div>
+                      <h3>Engineer Labour</h3>
+                      <p>Diagnosis and technical repair support.</p>
+                    </div>
+                  </div>
+
+                  <dl class="cost-card-details">
+                    <div>
+                      <dt>Rate</dt>
+                      <dd>$38.00 / hour</dd>
+                    </div>
+
+                    <div>
+                      <dt>Default Time</dt>
+                      <dd>8 minutes</dd>
+                    </div>
+                  </dl>
+
+                  <div class="cost-card-footer">
+                    <span>Updated July 12</span>
+
+                    <button
+                      class="text-button edit-cost-button"
+                      type="button"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                </article>
+
+                <article
+                  class="cost-card"
+                  data-cost-card
+                  data-category="labour"
+                  data-cost-type="hourly"
+                >
+                  <div class="cost-card-header">
+                    <span class="cost-card-category labour">
+                      Labour
+                    </span>
+
+                    <button
+                      class="row-menu-button"
+                      type="button"
+                      aria-label="Cost item options"
+                    >
+                      ⋯
+                    </button>
+                  </div>
+
+                  <div class="cost-card-main">
+                    <span class="cost-card-icon labour">QC</span>
+
+                    <div>
+                      <h3>Quality Control Labour</h3>
+                      <p>Final inspection and functional testing.</p>
+                    </div>
+                  </div>
+
+                  <dl class="cost-card-details">
+                    <div>
+                      <dt>Rate</dt>
+                      <dd>$31.00 / hour</dd>
+                    </div>
+
+                    <div>
+                      <dt>Default Time</dt>
+                      <dd>10 minutes</dd>
+                    </div>
+                  </dl>
+
+                  <div class="cost-card-footer">
+                    <span>Updated July 8</span>
+
+                    <button
+                      class="text-button edit-cost-button"
+                      type="button"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                </article>
+
+                <article
+                  class="cost-card"
+                  data-cost-card
+                  data-category="parts"
+                  data-cost-type="per-unit"
+                >
+                  <div class="cost-card-header">
+                    <span class="cost-card-category parts">
+                      Parts
+                    </span>
+
+                    <button
+                      class="row-menu-button"
+                      type="button"
+                      aria-label="Cost item options"
+                    >
+                      ⋯
+                    </button>
+                  </div>
+
+                  <div class="cost-card-main">
+                    <span class="cost-card-icon parts">RP</span>
+
+                    <div>
+                      <h3>Replacement Parts Allowance</h3>
+                      <p>Average replacement component allocation.</p>
+                    </div>
+                  </div>
+
+                  <dl class="cost-card-details">
+                    <div>
+                      <dt>Rate</dt>
+                      <dd>$17.00 / unit</dd>
+                    </div>
+
+                    <div>
+                      <dt>Waste Allowance</dt>
+                      <dd>2%</dd>
+                    </div>
+                  </dl>
+
+                  <div class="cost-card-footer">
+                    <span>Updated July 14</span>
+
+                    <button
+                      class="text-button edit-cost-button"
+                      type="button"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                </article>
+
+                <article
+                  class="cost-card"
+                  data-cost-card
+                  data-category="packaging"
+                  data-cost-type="per-unit"
+                >
+                  <div class="cost-card-header">
+                    <span class="cost-card-category packaging">
+                      Packaging
+                    </span>
+
+                    <button
+                      class="row-menu-button"
+                      type="button"
+                      aria-label="Cost item options"
+                    >
+                      ⋯
+                    </button>
+                  </div>
+
+                  <div class="cost-card-main">
+                    <span class="cost-card-icon packaging">BX</span>
+
+                    <div>
+                      <h3>Standard Carton</h3>
+                      <p>Outer carton, insert and protection materials.</p>
+                    </div>
+                  </div>
+
+                  <dl class="cost-card-details">
+                    <div>
+                      <dt>Rate</dt>
+                      <dd>$4.10 / unit</dd>
+                    </div>
+
+                    <div>
+                      <dt>Supplier</dt>
+                      <dd>Default supplier</dd>
+                    </div>
+                  </dl>
+
+                  <div class="cost-card-footer">
+                    <span>Updated July 5</span>
+
+                    <button
+                      class="text-button edit-cost-button"
+                      type="button"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                </article>
+
+                <article
+                  class="cost-card"
+                  data-cost-card
+                  data-category="logistics"
+                  data-cost-type="per-unit"
+                >
+                  <div class="cost-card-header">
+                    <span class="cost-card-category logistics">
+                      Logistics
+                    </span>
+
+                    <button
+                      class="row-menu-button"
+                      type="button"
+                      aria-label="Cost item options"
+                    >
+                      ⋯
+                    </button>
+                  </div>
+
+                  <div class="cost-card-main">
+                    <span class="cost-card-icon logistics">LG</span>
+
+                    <div>
+                      <h3>Outbound Logistics</h3>
+                      <p>Allocated outbound transportation expense.</p>
+                    </div>
+                  </div>
+
+                  <dl class="cost-card-details">
+                    <div>
+                      <dt>Rate</dt>
+                      <dd>$9.50 / unit</dd>
+                    </div>
+
+                    <div>
+                      <dt>Method</dt>
+                      <dd>Per unit</dd>
+                    </div>
+                  </dl>
+
+                  <div class="cost-card-footer">
+                    <span>Updated July 15</span>
+
+                    <button
+                      class="text-button edit-cost-button"
+                      type="button"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                </article>
+
+                <article
+                  class="cost-card"
+                  data-cost-card
+                  data-category="equipment"
+                  data-cost-type="fixed"
+                >
+                  <div class="cost-card-header">
+                    <span class="cost-card-category equipment">
+                      Equipment
+                    </span>
+
+                    <button
+                      class="row-menu-button"
+                      type="button"
+                      aria-label="Cost item options"
+                    >
+                      ⋯
+                    </button>
+                  </div>
+
+                  <div class="cost-card-main">
+                    <span class="cost-card-icon equipment">EQ</span>
+
+                    <div>
+                      <h3>Diagnostic Equipment</h3>
+                      <p>Monthly equipment allocation for testing.</p>
+                    </div>
+                  </div>
+
+                  <dl class="cost-card-details">
+                    <div>
+                      <dt>Rate</dt>
+                      <dd>$600 / month</dd>
+                    </div>
+
+                    <div>
+                      <dt>Allocation</dt>
+                      <dd>By project volume</dd>
+                    </div>
+                  </dl>
+
+                  <div class="cost-card-footer">
+                    <span>Updated June 30</span>
+
+                    <button
+                      class="text-button edit-cost-button"
+                      type="button"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                </article>
+
+                <article
+                  class="cost-card"
+                  data-cost-card
+                  data-category="overhead"
+                  data-cost-type="fixed"
+                >
+                  <div class="cost-card-header">
+                    <span class="cost-card-category overhead">
+                      Overhead
+                    </span>
+
+                    <button
+                      class="row-menu-button"
+                      type="button"
+                      aria-label="Cost item options"
+                    >
+                      ⋯
+                    </button>
+                  </div>
+
+                  <div class="cost-card-main">
+                    <span class="cost-card-icon overhead">WH</span>
+
+                    <div>
+                      <h3>Warehouse Allocation</h3>
+                      <p>Rent, utilities and project floor-space cost.</p>
+                    </div>
+                  </div>
+
+                  <dl class="cost-card-details">
+                    <div>
+                      <dt>Rate</dt>
+                      <dd>$3,200 / month</dd>
+                    </div>
+
+                    <div>
+                      <dt>Allocation</dt>
+                      <dd>By monthly volume</dd>
+                    </div>
+                  </dl>
+
+                  <div class="cost-card-footer">
+                    <span>Updated July 1</span>
+
+                    <button
+                      class="text-button edit-cost-button"
+                      type="button"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                </article>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <!-- =================================================
+             TEMPLATES PAGE
+        ================================================== -->
+        <section
+          class="app-page"
+          id="templates-page"
+          data-page="templates"
+        >
+          <div class="page-intro-row">
+            <div>
+              <p class="section-kicker">REUSABLE SOP WORKFLOWS</p>
+              <h2>Templates</h2>
+
+              <p class="section-description">
+                Build reusable refurbishment processes and add,
+                remove or reorder steps at any time.
+              </p>
+            </div>
+
+            <button
+              class="primary-button"
+              id="create-template-button"
+              type="button"
+            >
+              <span aria-hidden="true">＋</span>
+              New Template
+            </button>
+          </div>
+
+          <div class="template-grid" id="template-grid">
+
+            <article class="template-card">
+              <div class="template-card-header">
+                <span class="template-icon">FW</span>
+
+                <button
+                  class="row-menu-button"
+                  type="button"
+                  aria-label="Template options"
+                >
+                  ⋯
+                </button>
+              </div>
+
+              <div class="template-card-body">
+                <p class="template-type">PRODUCT REFURBISHMENT</p>
+                <h3>Floor Washer Refurbishment</h3>
+
+                <p>
+                  Complete refurbishment workflow for floor-washing
+                  appliances.
+                </p>
+              </div>
+
+              <ol class="template-step-preview">
+                <li>Receiving</li>
+                <li>Inspection</li>
+                <li>Disassembly</li>
+                <li>Cleaning</li>
+                <li>Repair</li>
+                <li class="more-steps">+4 more steps</li>
+              </ol>
+
+              <div class="template-card-meta">
+                <span>9 steps</span>
+                <span>8 default costs</span>
+                <span>Updated July 18</span>
+              </div>
+
+              <div class="template-card-footer">
+                <button
+                  class="secondary-button duplicate-template-button"
+                  type="button"
+                >
+                  Duplicate
+                </button>
+
+                <button
+                  class="primary-button edit-template-button"
+                  type="button"
+                >
+                  Edit Template
+                </button>
+              </div>
+            </article>
+
+            <article class="template-card">
+              <div class="template-card-header">
+                <span class="template-icon">VR</span>
+
+                <button
+                  class="row-menu-button"
+                  type="button"
+                  aria-label="Template options"
+                >
+                  ⋯
+                </button>
+              </div>
+
+              <div class="template-card-body">
+                <p class="template-type">PRODUCT REFURBISHMENT</p>
+                <h3>Vacuum Refurbishment</h3>
+
+                <p>
+                  Standard vacuum diagnosis, repair and repacking
+                  workflow.
+                </p>
+              </div>
+
+              <ol class="template-step-preview">
+                <li>Receiving</li>
+                <li>Initial Inspection</li>
+                <li>Diagnosis</li>
+                <li>Cleaning</li>
+                <li>Repair</li>
+                <li class="more-steps">+3 more steps</li>
+              </ol>
+
+              <div class="template-card-meta">
+                <span>8 steps</span>
+                <span>7 default costs</span>
+                <span>Updated July 11</span>
+              </div>
+
+              <div class="template-card-footer">
+                <button
+                  class="secondary-button duplicate-template-button"
+                  type="button"
+                >
+                  Duplicate
+                </button>
+
+                <button
+                  class="primary-button edit-template-button"
+                  type="button"
+                >
+                  Edit Template
+                </button>
+              </div>
+            </article>
+
+            <article class="template-card">
+              <div class="template-card-header">
+                <span class="template-icon">BI</span>
+
+                <button
+                  class="row-menu-button"
+                  type="button"
+                  aria-label="Template options"
+                >
+                  ⋯
+                </button>
+              </div>
+
+              <div class="template-card-body">
+                <p class="template-type">INSPECTION SERVICE</p>
+                <h3>Bulk Return Inspection</h3>
+
+                <p>
+                  High-volume receiving, grading and disposition
+                  reporting.
+                </p>
+              </div>
+
+              <ol class="template-step-preview">
+                <li>Receiving</li>
+                <li>Serial Scan</li>
+                <li>Cosmetic Inspection</li>
+                <li>Functional Test</li>
+                <li>Grading</li>
+                <li class="more-steps">+2 more steps</li>
+              </ol>
+
+              <div class="template-card-meta">
+                <span>7 steps</span>
+                <span>4 default costs</span>
+                <span>Updated July 7</span>
+              </div>
+
+              <div class="template-card-footer">
+                <button
+                  class="secondary-button duplicate-template-button"
+                  type="button"
+                >
+                  Duplicate
+                </button>
+
+                <button
+                  class="primary-button edit-template-button"
+                  type="button"
+                >
+                  Edit Template
+                </button>
+              </div>
+            </article>
+
+            <button
+              class="create-template-card"
+              id="empty-create-template-button"
+              type="button"
+            >
+              <span class="create-template-icon">＋</span>
+              <strong>Create a new template</strong>
+
+              <small>
+                Start with a blank workflow and add your own steps.
+              </small>
+            </button>
+          </div>
+        </section>
+
+        <!-- =================================================
+             CUSTOMERS PAGE
+        ================================================== -->
+        <section
+          class="app-page"
+          id="customers-page"
+          data-page="customers"
+        >
+          <div class="page-intro-row">
+            <div>
+              <p class="section-kicker">CUSTOMER DIRECTORY</p>
+              <h2>Customers</h2>
+
+              <p class="section-description">
+                Maintain customer information and review connected
+                refurbishment projects.
+              </p>
+            </div>
+
+            <button
+              class="primary-button"
+              id="add-customer-button"
+              type="button"
+            >
+              <span aria-hidden="true">＋</span>
+              Add Customer
+            </button>
+          </div>
+
+          <section class="content-panel">
+            <div class="panel-toolbar">
+              <div class="toolbar-search">
+                <span aria-hidden="true">⌕</span>
+
+                <input
+                  id="customer-search-input"
+                  type="search"
+                  placeholder="Search customers..."
+                  aria-label="Search customers"
+                >
+              </div>
+            </div>
+
+            <div class="customer-grid">
+              <article class="customer-card">
+                <div class="customer-card-header">
+                  <span class="customer-avatar">TI</span>
+
+                  <button
+                    class="row-menu-button"
+                    type="button"
+                    aria-label="Customer options"
+                  >
+                    ⋯
+                  </button>
+                </div>
+
+                <h3>Tineco</h3>
+                <p>Floor-care appliance refurbishment programs.</p>
+
+                <dl>
+                  <div>
+                    <dt>Active Projects</dt>
+                    <dd>1</dd>
+                  </div>
+
+                  <div>
+                    <dt>Total Quotes</dt>
+                    <dd>3</dd>
+                  </div>
+                </dl>
+              </article>
+
+              <article class="customer-card">
+                <div class="customer-card-header">
+                  <span class="customer-avatar">DY</span>
+
+                  <button
+                    class="row-menu-button"
+                    type="button"
+                    aria-label="Customer options"
+                  >
+                    ⋯
+                  </button>
+                </div>
+
+                <h3>Dyson</h3>
+                <p>Premium vacuum refurbishment and testing.</p>
+
+                <dl>
+                  <div>
+                    <dt>Active Projects</dt>
+                    <dd>1</dd>
+                  </div>
+
+                  <div>
+                    <dt>Total Quotes</dt>
+                    <dd>2</dd>
+                  </div>
+                </dl>
+              </article>
+
+              <article class="customer-card">
+                <div class="customer-card-header">
+                  <span class="customer-avatar">SN</span>
+
+                  <button
+                    class="row-menu-button"
+                    type="button"
+                    aria-label="Customer options"
+                  >
+                    ⋯
+                  </button>
+                </div>
+
+                <h3>SharkNinja</h3>
+                <p>Repair, testing and outbound preparation.</p>
+
+                <dl>
+                  <div>
+                    <dt>Active Projects</dt>
+                    <dd>1</dd>
+                  </div>
+
+                  <div>
+                    <dt>Total Quotes</dt>
+                    <dd>1</dd>
+                  </div>
+                </dl>
+              </article>
+
+              <article class="customer-card">
+                <div class="customer-card-header">
+                  <span class="customer-avatar">NR</span>
+
+                  <button
+                    class="row-menu-button"
+                    type="button"
+                    aria-label="Customer options"
+                  >
+                    ⋯
+                  </button>
+                </div>
+
+                <h3>Northstar Retail</h3>
+                <p>Bulk return inspection and product grading.</p>
+
+                <dl>
+                  <div>
+                    <dt>Active Projects</dt>
+                    <dd>1</dd>
+                  </div>
+
+                  <div>
+                    <dt>Total Quotes</dt>
+                    <dd>1</dd>
+                  </div>
+                </dl>
+              </article>
+            </div>
+          </section>
+        </section>
+
+        <!-- =================================================
+             REPORTS PAGE
+        ================================================== -->
+        <section
+          class="app-page"
+          id="reports-page"
+          data-page="reports"
+        >
+          <div class="page-intro-row">
+            <div>
+              <p class="section-kicker">COST AND PROFITABILITY</p>
+              <h2>Reports</h2>
+
+              <p class="section-description">
+                Review quotation value, margins, cost categories
+                and project performance.
+              </p>
+            </div>
+
+            <button
+              class="secondary-button"
+              id="export-report-button"
+              type="button"
+            >
+              <span aria-hidden="true">⇩</span>
+              Export Report
+            </button>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card">
+              <p class="stat-label">Total Quoted Revenue</p>
+              <strong class="stat-value">$148,600</strong>
+              <p class="stat-note">Current active quotations</p>
+            </article>
+
+            <article class="stat-card">
+              <p class="stat-label">Estimated Gross Profit</p>
+              <strong class="stat-value">$40,720</strong>
+              <p class="stat-note">Across active quotations</p>
+            </article>
+
+            <article class="stat-card">
+              <p class="stat-label">Average Unit Cost</p>
+              <strong class="stat-value">$52.94</strong>
+              <p class="stat-note">Weighted by project volume</p>
+            </article>
+
+            <article class="stat-card">
+              <p class="stat-label">Average Margin</p>
+              <strong class="stat-value">27.4%</strong>
+              <p class="stat-note">Current project average</p>
+            </article>
+          </div>
+
+          <div class="report-grid">
+            <section class="content-panel report-chart-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">MONTHLY TREND</p>
+                  <h3>Quoted Value</h3>
+                </div>
+
+                <select class="compact-select">
+                  <option>Last 6 months</option>
+                  <option>Last 12 months</option>
+                </select>
+              </div>
+
+              <div class="chart-placeholder">
+                <div class="chart-bar" style="--bar-height: 42%;">
+                  <span>Feb</span>
+                </div>
+
+                <div class="chart-bar" style="--bar-height: 55%;">
+                  <span>Mar</span>
+                </div>
+
+                <div class="chart-bar" style="--bar-height: 48%;">
+                  <span>Apr</span>
+                </div>
+
+                <div class="chart-bar" style="--bar-height: 72%;">
+                  <span>May</span>
+                </div>
+
+                <div class="chart-bar" style="--bar-height: 64%;">
+                  <span>Jun</span>
+                </div>
+
+                <div class="chart-bar" style="--bar-height: 88%;">
+                  <span>Jul</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="content-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="panel-kicker">PROJECT COMPARISON</p>
+                  <h3>Margin by Project</h3>
+                </div>
+              </div>
+
+              <div class="progress-list">
+                <div class="progress-item">
+                  <div class="progress-label">
+                    <span>Shark Detect</span>
+                    <strong>29.8%</strong>
+                  </div>
+
+                  <div class="progress-track">
+                    <span style="width: 74.5%;"></span>
+                  </div>
+                </div>
+
+                <div class="progress-item">
+                  <div class="progress-label">
+                    <span>Tineco S7</span>
+                    <strong>27.4%</strong>
+                  </div>
+
+                  <div class="progress-track">
+                    <span style="width: 68.5%;"></span>
+                  </div>
+                </div>
+
+                <div class="progress-item">
+                  <div class="progress-label">
+                    <span>Dyson V15</span>
+                    <strong>25.2%</strong>
+                  </div>
+
+                  <div class="progress-track">
+                    <span style="width: 63%;"></span>
+                  </div>
+                </div>
+
+                <div class="progress-item">
+                  <div class="progress-label">
+                    <span>Bulk Inspection</span>
+                    <strong>22.6%</strong>
+                  </div>
+
+                  <div class="progress-track">
+                    <span style="width: 56.5%;"></span>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <!-- =================================================
+             SETTINGS PAGE
+        ================================================== -->
+        <section
+          class="app-page"
+          id="settings-page"
+          data-page="settings"
+        >
+          <div class="page-intro-row">
+            <div>
+              <p class="section-kicker">SYSTEM CONFIGURATION</p>
+              <h2>Settings</h2>
+
+              <p class="section-description">
+                Configure company details, quotation defaults,
+                currencies and system preferences.
+              </p>
+            </div>
+
+            <button
+              class="primary-button"
+              id="save-settings-button"
+              type="button"
+            >
+              Save Changes
+            </button>
+          </div>
+
+          <div class="settings-layout">
+            <nav class="settings-navigation">
+              <button
+                class="settings-nav-item active"
+                type="button"
+                data-settings-panel="company"
+              >
+                Company Profile
+              </button>
+
+              <button
+                class="settings-nav-item"
+                type="button"
+                data-settings-panel="quote-defaults"
+              >
+                Quote Defaults
+              </button>
+
+              <button
+                class="settings-nav-item"
+                type="button"
+                data-settings-panel="calculation"
+              >
+                Calculations
+              </button>
+
+              <button
+                class="settings-nav-item"
+                type="button"
+                data-settings-panel="appearance"
+              >
+                Appearance
+              </button>
+
+              <button
+                class="settings-nav-item"
+                type="button"
+                data-settings-panel="data"
+              >
+                Data and Backup
+              </button>
+            </nav>
+
+            <section class="content-panel settings-content">
+              <div
+                class="settings-panel active"
+                id="settings-company-panel"
+                data-settings-content="company"
+              >
+                <div class="settings-section-header">
+                  <h3>Company Profile</h3>
+
+                  <p>
+                    This information will appear on customer-facing
+                    quotations.
+                  </p>
+                </div>
+
+                <form class="settings-form">
+                  <div class="form-field full-width">
+                    <label for="company-name-input">
+                      Company Name
+                    </label>
+
+                    <input
+                      id="company-name-input"
+                      type="text"
+                      value="Refurbishment Services Inc."
+                    >
+                  </div>
+
+                  <div class="form-field">
+                    <label for="company-email-input">
+                      Email
+                    </label>
+
+                    <input
+                      id="company-email-input"
+                      type="email"
+                      placeholder="quotes@company.com"
+                    >
+                  </div>
+
+                  <div class="form-field">
+                    <label for="company-phone-input">
+                      Phone
+                    </label>
+
+                    <input
+                      id="company-phone-input"
+                      type="tel"
+                      placeholder="+1 000 000 0000"
+                    >
+                  </div>
+
+                  <div class="form-field full-width">
+                    <label for="company-address-input">
+                      Address
+                    </label>
+
+                    <textarea
+                      id="company-address-input"
+                      rows="3"
+                      placeholder="Enter company address"
+                    ></textarea>
+                  </div>
+                </form>
+              </div>
+
+              <div
+                class="settings-panel"
+                id="settings-quote-defaults-panel"
+                data-settings-content="quote-defaults"
+              >
+                <div class="settings-section-header">
+                  <h3>Quote Defaults</h3>
+
+                  <p>
+                    Set the standard values used when a new project
+                    is created.
+                  </p>
+                </div>
+
+                <form class="settings-form">
+                  <div class="form-field">
+                    <label for="default-currency-select">
+                      Default Currency
+                    </label>
+
+                    <select id="default-currency-select">
+                      <option value="CAD">CAD</option>
+                      <option value="USD">USD</option>
+                      <option value="CNY">CNY</option>
+                    </select>
+                  </div>
+
+                  <div class="form-field">
+                    <label for="quote-validity-input">
+                      Quote Validity
+                    </label>
+
+                    <div class="input-with-suffix">
+                      <input
+                        id="quote-validity-input"
+                        type="number"
+                        value="30"
+                        min="1"
+                      >
+                      <span>days</span>
+                    </div>
+                  </div>
+
+                  <div class="form-field">
+                    <label for="default-pricing-method">
+                      Pricing Method
+                    </label>
+
+                    <select id="default-pricing-method">
+                      <option value="margin">Gross Margin</option>
+                      <option value="markup">Markup</option>
+                      <option value="fixed">Fixed Selling Price</option>
+                    </select>
+                  </div>
+
+                  <div class="form-field">
+                    <label for="default-margin-input">
+                      Default Margin
+                    </label>
+
+                    <div class="input-with-suffix">
+                      <input
+                        id="default-margin-input"
+                        type="number"
+                        value="25"
+                        step="0.1"
+                      >
+                      <span>%</span>
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+              <div
+                class="settings-panel"
+                id="settings-calculation-panel"
+                data-settings-content="calculation"
+              >
+                <div class="settings-section-header">
+                  <h3>Calculation Settings</h3>
+
+                  <p>
+                    Configure standard working capacity and costing
+                    assumptions.
+                  </p>
+                </div>
+
+                <form class="settings-form">
+                  <div class="form-field">
+                    <label for="working-hours-input">
+                      Working Hours Per Day
+                    </label>
+
+                    <input
+                      id="working-hours-input"
+                      type="number"
+                      value="8"
+                      min="1"
+                      max="24"
+                    >
+                  </div>
+
+                  <div class="form-field">
+                    <label for="working-days-input">
+                      Working Days Per Month
+                    </label>
+
+                    <input
+                      id="working-days-input"
+                      type="number"
+                      value="22"
+                      min="1"
+                      max="31"
+                    >
+                  </div>
+
+                  <div class="form-field">
+                    <label for="default-rework-input">
+                      Default Rework Allowance
+                    </label>
+
+                    <div class="input-with-suffix">
+                      <input
+                        id="default-rework-input"
+                        type="number"
+                        value="2"
+                        step="0.1"
+                      >
+                      <span>%</span>
+                    </div>
+                  </div>
+
+                  <div class="form-field">
+                    <label for="default-contingency-input">
+                      Default Contingency
+                    </label>
+
+                    <div class="input-with-suffix">
+                      <input
+                        id="default-contingency-input"
+                        type="number"
+                        value="3"
+                        step="0.1"
+                      >
+                      <span>%</span>
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+              <div
+                class="settings-panel"
+                id="settings-appearance-panel"
+                data-settings-content="appearance"
+              >
+                <div class="settings-section-header">
+                  <h3>Appearance</h3>
+
+                  <p>
+                    Choose how the quotation system looks on this
+                    device.
+                  </p>
+                </div>
+
+                <div class="appearance-options">
+                  <button
+                    class="appearance-option active"
+                    type="button"
+                    data-theme-choice="dark"
+                  >
+                    <span class="theme-preview dark-preview"></span>
+                    <strong>Dark</strong>
+                    <small>ChatGPT-inspired dark workspace</small>
+                  </button>
+
+                  <button
+                    class="appearance-option"
+                    type="button"
+                    data-theme-choice="light"
+                  >
+                    <span class="theme-preview light-preview"></span>
+                    <strong>Light</strong>
+                    <small>Bright professional workspace</small>
+                  </button>
+                </div>
+              </div>
+
+              <div
+                class="settings-panel"
+                id="settings-data-panel"
+                data-settings-content="data"
+              >
+                <div class="settings-section-header">
+                  <h3>Data and Backup</h3>
+
+                  <p>
+                    Export, restore or reset locally stored system
+                    information.
+                  </p>
+                </div>
+
+                <div class="data-action-list">
+                  <div class="data-action-row">
+                    <div>
+                      <strong>Export Full Backup</strong>
+                      <p>
+                        Save projects, cost items, templates and
+                        settings as JSON.
+                      </p>
+                    </div>
+
+                    <button
+                      class="secondary-button"
+                      id="settings-export-backup-button"
+                      type="button"
+                    >
+                      Export
+                    </button>
+                  </div>
+
+                  <div class="data-action-row">
+                    <div>
+                      <strong>Import Backup</strong>
+                      <p>
+                        Restore information from a previously
+                        exported JSON file.
+                      </p>
+                    </div>
+
+                    <button
+                      class="secondary-button"
+                      id="settings-import-backup-button"
+                      type="button"
+                    >
+                      Import
+                    </button>
+                  </div>
+
+                  <div class="data-action-row danger">
+                    <div>
+                      <strong>Reset Local Data</strong>
+                      <p>
+                        Permanently remove locally saved projects
+                        and settings.
+                      </p>
+                    </div>
+
+                    <button
+                      class="danger-button"
+                      id="reset-local-data-button"
+                      type="button"
+                    >
+                      Reset
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- =====================================================
+       GENERIC MODAL
+  ====================================================== -->
+  <div
+    class="modal-backdrop"
+    id="modal-backdrop"
+    aria-hidden="true"
+  >
+    <section
+      class="modal-dialog"
+      id="modal-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
+      <header class="modal-header">
+        <div>
+          <p class="modal-kicker" id="modal-kicker">
+            NEW ITEM
+          </p>
+
+          <h2 id="modal-title">
+            Create Project
+          </h2>
+        </div>
+
+        <button
+          class="icon-button"
+          id="modal-close-button"
+          type="button"
+          aria-label="Close dialog"
+        >
+          ×
+        </button>
+      </header>
+
+      <div class="modal-body" id="modal-body">
+        <p>
+          Modal content will be inserted by JavaScript.
+        </p>
+      </div>
+
+      <footer class="modal-footer" id="modal-footer">
+        <button
+          class="secondary-button"
+          id="modal-cancel-button"
+          type="button"
+        >
+          Cancel
+        </button>
+
+        <button
+          class="primary-button"
+          id="modal-confirm-button"
+          type="button"
+        >
+          Continue
+        </button>
+      </footer>
     </section>
-  </main>
+  </div>
+
+  <!-- =====================================================
+       TOAST NOTIFICATION
+  ====================================================== -->
+  <div
+    class="toast-container"
+    id="toast-container"
+    aria-live="polite"
+    aria-atomic="true"
+  ></div>
+
+  <!-- Hidden file input for JSON imports -->
+  <input
+    id="backup-file-input"
+    type="file"
+    accept=".json,application/json"
+    hidden
+  >
 
   <script src="script.js"></script>
 </body>
