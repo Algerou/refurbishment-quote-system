@@ -2,45 +2,56 @@
 
 /* =========================================================
    REFURBISHMENT QUOTE SYSTEM
-   MILESTONE 1 APPLICATION SCRIPT
+   MILESTONE 2 — EDITABLE COST POOL
 ========================================================= */
 
 /* =========================================================
-   1. APPLICATION CONFIGURATION
+   1. STORAGE KEYS
 ========================================================= */
 
-const APP_STORAGE_KEYS = {
+const STORAGE_KEYS = {
   theme: "rqs-theme",
   sidebarCollapsed: "rqs-sidebar-collapsed",
   settings: "rqs-settings",
-  demoData: "rqs-demo-data"
+  costItems: "rqs-cost-items",
+  costCategories: "rqs-cost-categories"
 };
+
+/* =========================================================
+   2. PAGE INFORMATION
+========================================================= */
 
 const PAGE_INFORMATION = {
   dashboard: {
     title: "Dashboard",
     eyebrow: "WORKSPACE"
   },
+
   projects: {
     title: "Projects",
     eyebrow: "PROJECT MANAGEMENT"
   },
+
   "cost-pool": {
     title: "Cost Pool",
     eyebrow: "REUSABLE COST LIBRARY"
   },
+
   templates: {
     title: "Templates",
     eyebrow: "REUSABLE SOP WORKFLOWS"
   },
+
   customers: {
     title: "Customers",
     eyebrow: "CUSTOMER DIRECTORY"
   },
+
   reports: {
     title: "Reports",
     eyebrow: "COST AND PROFITABILITY"
   },
+
   settings: {
     title: "Settings",
     eyebrow: "SYSTEM CONFIGURATION"
@@ -48,152 +59,321 @@ const PAGE_INFORMATION = {
 };
 
 /* =========================================================
-   2. DEMONSTRATION DATA
+   3. DEFAULT CATEGORIES
 ========================================================= */
 
-const demoData = {
-  projects: [
-    {
-      id: "project-tineco-s7",
-      name: "Tineco S7 Refurbishment",
-      customer: "Tineco",
-      status: "draft",
-      volume: 500,
-      volumeUnit: "month",
-      unitPrice: 81,
-      margin: 27.4
-    },
-    {
-      id: "project-dyson-v15",
-      name: "Dyson V15 Refurbishment",
-      customer: "Dyson",
-      status: "review",
-      volume: 300,
-      volumeUnit: "month",
-      unitPrice: 94.5,
-      margin: 25.2
-    },
-    {
-      id: "project-shark-detect",
-      name: "Shark Detect Repair Program",
-      customer: "SharkNinja",
-      status: "approved",
-      volume: 800,
-      volumeUnit: "month",
-      unitPrice: 69.8,
-      margin: 29.8
-    },
-    {
-      id: "project-bulk-inspection",
-      name: "Bulk Return Inspection",
-      customer: "Northstar Retail",
-      status: "draft",
-      volume: 1500,
-      volumeUnit: "batch",
-      unitPrice: 16.2,
-      margin: 22.6
-    }
-  ],
+const DEFAULT_COST_CATEGORIES = [
+  {
+    id: "labour",
+    name: "Labour",
+    abbreviation: "L",
+    colorClass: "labour",
+    builtIn: true
+  },
 
-  costItems: [
-    {
-      id: "cost-operator-labour",
-      name: "Operator Labour",
-      category: "labour",
-      type: "hourly",
-      rate: 28
-    },
-    {
-      id: "cost-engineer-labour",
-      name: "Engineer Labour",
-      category: "labour",
-      type: "hourly",
-      rate: 38
-    },
-    {
-      id: "cost-qc-labour",
-      name: "Quality Control Labour",
-      category: "labour",
-      type: "hourly",
-      rate: 31
-    },
-    {
-      id: "cost-replacement-parts",
-      name: "Replacement Parts Allowance",
-      category: "parts",
-      type: "per-unit",
-      rate: 17
-    },
-    {
-      id: "cost-standard-carton",
-      name: "Standard Carton",
-      category: "packaging",
-      type: "per-unit",
-      rate: 4.1
-    },
-    {
-      id: "cost-outbound-logistics",
-      name: "Outbound Logistics",
-      category: "logistics",
-      type: "per-unit",
-      rate: 9.5
-    },
-    {
-      id: "cost-diagnostic-equipment",
-      name: "Diagnostic Equipment",
-      category: "equipment",
-      type: "fixed",
-      rate: 600
-    },
-    {
-      id: "cost-warehouse-allocation",
-      name: "Warehouse Allocation",
-      category: "overhead",
-      type: "fixed",
-      rate: 3200
-    }
-  ],
+  {
+    id: "parts",
+    name: "Parts",
+    abbreviation: "P",
+    colorClass: "parts",
+    builtIn: true
+  },
 
-  templates: [
-    {
-      id: "template-floor-washer",
-      name: "Floor Washer Refurbishment",
-      steps: 9
-    },
-    {
-      id: "template-vacuum",
-      name: "Vacuum Refurbishment",
-      steps: 8
-    },
-    {
-      id: "template-bulk-inspection",
-      name: "Bulk Return Inspection",
-      steps: 7
-    }
-  ],
+  {
+    id: "packaging",
+    name: "Packaging",
+    abbreviation: "PK",
+    colorClass: "packaging",
+    builtIn: true
+  },
 
-  customers: [
-    {
-      id: "customer-tineco",
-      name: "Tineco"
-    },
-    {
-      id: "customer-dyson",
-      name: "Dyson"
-    },
-    {
-      id: "customer-sharkninja",
-      name: "SharkNinja"
-    },
-    {
-      id: "customer-northstar",
-      name: "Northstar Retail"
-    }
-  ]
+  {
+    id: "logistics",
+    name: "Logistics",
+    abbreviation: "LG",
+    colorClass: "logistics",
+    builtIn: true
+  },
+
+  {
+    id: "equipment",
+    name: "Equipment",
+    abbreviation: "EQ",
+    colorClass: "equipment",
+    builtIn: true
+  },
+
+  {
+    id: "overhead",
+    name: "Overhead",
+    abbreviation: "OH",
+    colorClass: "overhead",
+    builtIn: true
+  }
+];
+
+/* =========================================================
+   4. DEFAULT COST ITEMS
+========================================================= */
+
+const DEFAULT_COST_ITEMS = [
+  {
+    id: "cost-operator-labour",
+    name: "Operator Labour",
+    categoryId: "labour",
+    calculationMethod: "hourly",
+    rate: 28,
+    currency: "CAD",
+    unit: "hour",
+    defaultQuantity: 12,
+    quantityUnit: "minutes",
+    description: "Production and refurbishment operator labour.",
+    status: "active",
+    updatedAt: "2026-07-10T09:00:00.000Z"
+  },
+
+  {
+    id: "cost-engineer-labour",
+    name: "Engineer Labour",
+    categoryId: "labour",
+    calculationMethod: "hourly",
+    rate: 38,
+    currency: "CAD",
+    unit: "hour",
+    defaultQuantity: 8,
+    quantityUnit: "minutes",
+    description: "Diagnosis and technical repair support.",
+    status: "active",
+    updatedAt: "2026-07-12T09:00:00.000Z"
+  },
+
+  {
+    id: "cost-qc-labour",
+    name: "Quality Control Labour",
+    categoryId: "labour",
+    calculationMethod: "hourly",
+    rate: 31,
+    currency: "CAD",
+    unit: "hour",
+    defaultQuantity: 10,
+    quantityUnit: "minutes",
+    description: "Final inspection and functional testing.",
+    status: "active",
+    updatedAt: "2026-07-08T09:00:00.000Z"
+  },
+
+  {
+    id: "cost-supervisor-labour",
+    name: "Supervisor Labour",
+    categoryId: "labour",
+    calculationMethod: "hourly",
+    rate: 35,
+    currency: "CAD",
+    unit: "hour",
+    defaultQuantity: 3,
+    quantityUnit: "minutes",
+    description: "Production supervision and process support.",
+    status: "active",
+    updatedAt: "2026-07-06T09:00:00.000Z"
+  },
+
+  {
+    id: "cost-replacement-parts",
+    name: "Replacement Parts Allowance",
+    categoryId: "parts",
+    calculationMethod: "per-unit",
+    rate: 17,
+    currency: "USD",
+    unit: "unit",
+    defaultQuantity: 1,
+    quantityUnit: "unit",
+    description: "Average replacement component allocation.",
+    status: "active",
+    updatedAt: "2026-07-14T09:00:00.000Z"
+  },
+
+  {
+    id: "cost-consumable-parts",
+    name: "Consumable Parts Allowance",
+    categoryId: "parts",
+    calculationMethod: "per-unit",
+    rate: 2.25,
+    currency: "USD",
+    unit: "unit",
+    defaultQuantity: 1,
+    quantityUnit: "unit",
+    description: "Fasteners, filters and small consumable parts.",
+    status: "active",
+    updatedAt: "2026-07-09T09:00:00.000Z"
+  },
+
+  {
+    id: "cost-standard-carton",
+    name: "Standard Carton",
+    categoryId: "packaging",
+    calculationMethod: "per-unit",
+    rate: 4.1,
+    currency: "USD",
+    unit: "unit",
+    defaultQuantity: 1,
+    quantityUnit: "unit",
+    description: "Outer carton, inserts and protective materials.",
+    status: "active",
+    updatedAt: "2026-07-05T09:00:00.000Z"
+  },
+
+  {
+    id: "cost-label-package",
+    name: "Label and Documentation Package",
+    categoryId: "packaging",
+    calculationMethod: "per-unit",
+    rate: 0.65,
+    currency: "USD",
+    unit: "unit",
+    defaultQuantity: 1,
+    quantityUnit: "unit",
+    description: "Product labels, documents and barcode materials.",
+    status: "active",
+    updatedAt: "2026-07-04T09:00:00.000Z"
+  },
+
+  {
+    id: "cost-outbound-logistics",
+    name: "Outbound Logistics",
+    categoryId: "logistics",
+    calculationMethod: "per-unit",
+    rate: 9.5,
+    currency: "USD",
+    unit: "unit",
+    defaultQuantity: 1,
+    quantityUnit: "unit",
+    description: "Allocated outbound transportation expense.",
+    status: "active",
+    updatedAt: "2026-07-15T09:00:00.000Z"
+  },
+
+  {
+    id: "cost-diagnostic-equipment",
+    name: "Diagnostic Equipment",
+    categoryId: "equipment",
+    calculationMethod: "monthly",
+    rate: 600,
+    currency: "CAD",
+    unit: "month",
+    defaultQuantity: 1,
+    quantityUnit: "month",
+    description: "Monthly diagnostic and testing equipment allocation.",
+    status: "active",
+    updatedAt: "2026-06-30T09:00:00.000Z"
+  },
+
+  {
+    id: "cost-warehouse-allocation",
+    name: "Warehouse Allocation",
+    categoryId: "overhead",
+    calculationMethod: "monthly",
+    rate: 3200,
+    currency: "CAD",
+    unit: "month",
+    defaultQuantity: 1,
+    quantityUnit: "month",
+    description: "Rent, utilities and project floor-space allocation.",
+    status: "active",
+    updatedAt: "2026-07-01T09:00:00.000Z"
+  },
+
+  {
+    id: "cost-admin-allocation",
+    name: "Administration Allocation",
+    categoryId: "overhead",
+    calculationMethod: "percentage",
+    rate: 3,
+    currency: "CAD",
+    unit: "percent",
+    defaultQuantity: 1,
+    quantityUnit: "project",
+    description: "Administration and office support allocation.",
+    status: "inactive",
+    updatedAt: "2026-06-28T09:00:00.000Z"
+  }
+];
+
+/* =========================================================
+   5. DEMONSTRATION PROJECT DATA
+========================================================= */
+
+const DEMO_PROJECTS = [
+  {
+    id: "project-tineco-s7",
+    name: "Tineco S7 Refurbishment",
+    customer: "Tineco",
+    status: "draft",
+    volume: 500,
+    volumeUnit: "month",
+    unitPrice: 81,
+    margin: 27.4
+  },
+
+  {
+    id: "project-dyson-v15",
+    name: "Dyson V15 Refurbishment",
+    customer: "Dyson",
+    status: "review",
+    volume: 300,
+    volumeUnit: "month",
+    unitPrice: 94.5,
+    margin: 25.2
+  },
+
+  {
+    id: "project-shark-detect",
+    name: "Shark Detect Repair Program",
+    customer: "SharkNinja",
+    status: "approved",
+    volume: 800,
+    volumeUnit: "month",
+    unitPrice: 69.8,
+    margin: 29.8
+  },
+
+  {
+    id: "project-bulk-inspection",
+    name: "Bulk Return Inspection",
+    customer: "Northstar Retail",
+    status: "draft",
+    volume: 1500,
+    volumeUnit: "batch",
+    unitPrice: 16.2,
+    margin: 22.6
+  }
+];
+
+/* =========================================================
+   6. APPLICATION STATE
+========================================================= */
+
+const appState = {
+  currentPage: "dashboard",
+  currentTheme: "dark",
+  sidebarCollapsed: false,
+
+  costItems: [],
+  costCategories: [],
+
+  selectedCostCategory: "all",
+  selectedCostMethod: "all",
+  selectedCostStatus: "all",
+  costSearchText: "",
+  costSortMethod: "updated-desc",
+
+  editingCostItemId: null,
+  editingCategoryId: null,
+
+  modalConfirmHandler: null
 };
 
 /* =========================================================
-   3. DOM HELPERS
+   7. DOM HELPERS
 ========================================================= */
 
 const getElement = (selector) => document.querySelector(selector);
@@ -201,16 +381,20 @@ const getElement = (selector) => document.querySelector(selector);
 const getElements = (selector) =>
   Array.from(document.querySelectorAll(selector));
 
-const safeAddEventListener = (element, eventName, handler) => {
+const safeAddEventListener = (
+  element,
+  eventName,
+  handler
+) => {
   if (element) {
     element.addEventListener(eventName, handler);
   }
 };
 
 const escapeHtml = (value) => {
-  const temporaryElement = document.createElement("div");
-  temporaryElement.textContent = String(value ?? "");
-  return temporaryElement.innerHTML;
+  const element = document.createElement("div");
+  element.textContent = String(value ?? "");
+  return element.innerHTML;
 };
 
 const normalizeSearchValue = (value) =>
@@ -218,257 +402,193 @@ const normalizeSearchValue = (value) =>
     .trim()
     .toLowerCase();
 
-const formatCurrency = (value, currency = "USD") => {
+const createId = (prefix) => {
+  const randomText = Math.random()
+    .toString(36)
+    .slice(2, 9);
+
+  return `${prefix}-${Date.now()}-${randomText}`;
+};
+
+const deepClone = (value) =>
+  JSON.parse(JSON.stringify(value));
+
+/* =========================================================
+   8. FORMATTING HELPERS
+========================================================= */
+
+const formatCurrency = (
+  value,
+  currency = "CAD"
+) => {
   const numericValue = Number(value);
 
   if (!Number.isFinite(numericValue)) {
     return "$0.00";
   }
 
-  return new Intl.NumberFormat("en-CA", {
-    style: "currency",
-    currency,
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  }).format(numericValue);
+  try {
+    return new Intl.NumberFormat("en-CA", {
+      style: "currency",
+      currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(numericValue);
+  } catch {
+    return `${currency} ${numericValue.toFixed(2)}`;
+  }
 };
 
-/* =========================================================
-   4. APPLICATION STATE
-========================================================= */
-
-const appState = {
-  currentPage: "dashboard",
-  currentTheme: "dark",
-  sidebarCollapsed: false,
-  selectedCostCategory: "all",
-  selectedProjectStatus: "all",
-  currentSettingsPanel: "company",
-  modalConfirmHandler: null
-};
-
-/* =========================================================
-   5. PAGE NAVIGATION
-========================================================= */
-
-const closeMobileSidebar = () => {
-  document.body.classList.remove("sidebar-open");
-};
-
-const updatePageHeader = (pageName) => {
-  const pageTitle = getElement("#page-title");
-  const pageEyebrow = getElement("#page-eyebrow");
-  const pageInfo = PAGE_INFORMATION[pageName];
-
-  if (!pageInfo) {
-    return;
+const formatDate = (dateValue) => {
+  if (!dateValue) {
+    return "—";
   }
 
-  if (pageTitle) {
-    pageTitle.textContent = pageInfo.title;
+  const date = new Date(dateValue);
+
+  if (Number.isNaN(date.getTime())) {
+    return "—";
   }
 
-  if (pageEyebrow) {
-    pageEyebrow.textContent = pageInfo.eyebrow;
-  }
-
-  document.title = `${pageInfo.title} | Refurbishment Quote System`;
+  return new Intl.DateTimeFormat("en-CA", {
+    year: "numeric",
+    month: "short",
+    day: "numeric"
+  }).format(date);
 };
 
-const navigateToPage = (pageName) => {
-  const targetPage = getElement(`[data-page="${pageName}"]`);
+const formatCalculationMethod = (method) => {
+  const labels = {
+    hourly: "Hourly",
+    "per-minute": "Per minute",
+    "per-unit": "Per unit",
+    fixed: "Fixed",
+    monthly: "Monthly",
+    percentage: "Percentage",
+    "per-shipment": "Per shipment",
+    "per-pallet": "Per pallet"
+  };
 
-  if (!targetPage) {
-    showToast(`Page "${pageName}" was not found.`, "error");
-    return;
-  }
-
-  getElements(".app-page").forEach((page) => {
-    page.classList.remove("active");
-  });
-
-  targetPage.classList.add("active");
-
-  getElements(".nav-item[data-page-target]").forEach((button) => {
-    const buttonPage = button.dataset.pageTarget;
-    button.classList.toggle("active", buttonPage === pageName);
-  });
-
-  appState.currentPage = pageName;
-  updatePageHeader(pageName);
-  closeMobileSidebar();
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
+  return labels[method] || method;
 };
 
-const initializeNavigation = () => {
-  getElements("[data-page-target]").forEach((button) => {
-    safeAddEventListener(button, "click", () => {
-      navigateToPage(button.dataset.pageTarget);
-    });
-  });
+const formatRate = (item) => {
+  if (item.calculationMethod === "percentage") {
+    return `${Number(item.rate).toFixed(2)}%`;
+  }
 
-  safeAddEventListener(getElement("#brand-button"), "click", () => {
-    navigateToPage("dashboard");
-  });
-
-  safeAddEventListener(
-    getElement("#view-all-projects-button"),
-    "click",
-    () => {
-      navigateToPage("projects");
-    }
+  const amount = formatCurrency(
+    item.rate,
+    item.currency
   );
+
+  const suffixes = {
+    hourly: "hour",
+    "per-minute": "minute",
+    "per-unit": "unit",
+    fixed: "fixed",
+    monthly: "month",
+    "per-shipment": "shipment",
+    "per-pallet": "pallet"
+  };
+
+  const suffix =
+    suffixes[item.calculationMethod] ||
+    item.unit ||
+    "unit";
+
+  return `${amount} / ${suffix}`;
 };
+
+const getCategoryById = (categoryId) =>
+  appState.costCategories.find(
+    (category) => category.id === categoryId
+  );
+
+const getCategoryName = (categoryId) =>
+  getCategoryById(categoryId)?.name ||
+  "Uncategorized";
+
+const getCategoryClass = (categoryId) =>
+  getCategoryById(categoryId)?.colorClass ||
+  "overhead";
 
 /* =========================================================
-   6. SIDEBAR
+   9. LOCAL STORAGE
 ========================================================= */
 
-const applySidebarState = () => {
-  document.body.classList.toggle(
-    "sidebar-collapsed",
-    appState.sidebarCollapsed
-  );
+const loadCostPoolData = () => {
+  const savedCategories =
+    localStorage.getItem(
+      STORAGE_KEYS.costCategories
+    );
+
+  const savedItems =
+    localStorage.getItem(
+      STORAGE_KEYS.costItems
+    );
+
+  try {
+    appState.costCategories = savedCategories
+      ? JSON.parse(savedCategories)
+      : deepClone(DEFAULT_COST_CATEGORIES);
+  } catch {
+    appState.costCategories =
+      deepClone(DEFAULT_COST_CATEGORIES);
+  }
+
+  try {
+    appState.costItems = savedItems
+      ? JSON.parse(savedItems)
+      : deepClone(DEFAULT_COST_ITEMS);
+  } catch {
+    appState.costItems =
+      deepClone(DEFAULT_COST_ITEMS);
+  }
+
+  if (!Array.isArray(appState.costCategories)) {
+    appState.costCategories =
+      deepClone(DEFAULT_COST_CATEGORIES);
+  }
+
+  if (!Array.isArray(appState.costItems)) {
+    appState.costItems =
+      deepClone(DEFAULT_COST_ITEMS);
+  }
+
+  saveCostPoolData();
 };
 
-const toggleSidebarCollapse = () => {
-  appState.sidebarCollapsed = !appState.sidebarCollapsed;
+const saveCostPoolData = () => {
+  localStorage.setItem(
+    STORAGE_KEYS.costCategories,
+    JSON.stringify(appState.costCategories)
+  );
 
   localStorage.setItem(
-    APP_STORAGE_KEYS.sidebarCollapsed,
-    String(appState.sidebarCollapsed)
+    STORAGE_KEYS.costItems,
+    JSON.stringify(appState.costItems)
   );
-
-  applySidebarState();
-};
-
-const initializeSidebar = () => {
-  const savedSidebarState =
-    localStorage.getItem(APP_STORAGE_KEYS.sidebarCollapsed);
-
-  appState.sidebarCollapsed = savedSidebarState === "true";
-  applySidebarState();
-
-  safeAddEventListener(
-    getElement("#sidebar-collapse-button"),
-    "click",
-    () => {
-      if (window.innerWidth <= 1000) {
-        closeMobileSidebar();
-        return;
-      }
-
-      toggleSidebarCollapse();
-    }
-  );
-
-  safeAddEventListener(
-    getElement("#mobile-menu-button"),
-    "click",
-    () => {
-      document.body.classList.add("sidebar-open");
-    }
-  );
-
-  safeAddEventListener(
-    getElement("#sidebar-overlay"),
-    "click",
-    closeMobileSidebar
-  );
-
-  window.addEventListener("resize", () => {
-    if (window.innerWidth > 1000) {
-      closeMobileSidebar();
-    }
-  });
 };
 
 /* =========================================================
-   7. THEME
+   10. TOAST NOTIFICATIONS
 ========================================================= */
 
-const updateThemeControls = () => {
-  const themeIcon = getElement("#theme-toggle-icon");
+const showToast = (
+  message,
+  type = "success",
+  duration = 3000
+) => {
+  const container =
+    getElement("#toast-container");
 
-  if (themeIcon) {
-    themeIcon.textContent =
-      appState.currentTheme === "dark" ? "☾" : "☀";
-  }
-
-  getElements("[data-theme-choice]").forEach((button) => {
-    button.classList.toggle(
-      "active",
-      button.dataset.themeChoice === appState.currentTheme
-    );
-  });
-};
-
-const applyTheme = (themeName, savePreference = true) => {
-  const safeTheme = themeName === "light" ? "light" : "dark";
-
-  appState.currentTheme = safeTheme;
-
-  document.body.classList.toggle(
-    "light-theme",
-    safeTheme === "light"
-  );
-
-  if (savePreference) {
-    localStorage.setItem(APP_STORAGE_KEYS.theme, safeTheme);
-  }
-
-  updateThemeControls();
-};
-
-const toggleTheme = () => {
-  const nextTheme =
-    appState.currentTheme === "dark" ? "light" : "dark";
-
-  applyTheme(nextTheme);
-  showToast(
-    `${nextTheme === "dark" ? "Dark" : "Light"} theme enabled.`
-  );
-};
-
-const initializeTheme = () => {
-  const savedTheme = localStorage.getItem(APP_STORAGE_KEYS.theme);
-
-  applyTheme(savedTheme || "dark", false);
-
-  safeAddEventListener(
-    getElement("#theme-toggle-button"),
-    "click",
-    toggleTheme
-  );
-
-  getElements("[data-theme-choice]").forEach((button) => {
-    safeAddEventListener(button, "click", () => {
-      applyTheme(button.dataset.themeChoice);
-      showToast(
-        `${
-          button.dataset.themeChoice === "dark" ? "Dark" : "Light"
-        } theme enabled.`
-      );
-    });
-  });
-};
-
-/* =========================================================
-   8. TOAST NOTIFICATIONS
-========================================================= */
-
-function showToast(message, type = "success", duration = 3200) {
-  const toastContainer = getElement("#toast-container");
-
-  if (!toastContainer) {
+  if (!container) {
     return;
   }
 
   const toast = document.createElement("div");
+
   toast.className = `toast ${type}`;
 
   const icon =
@@ -483,84 +603,367 @@ function showToast(message, type = "success", duration = 3200) {
     <span>${escapeHtml(message)}</span>
   `;
 
-  toastContainer.appendChild(toast);
+  container.appendChild(toast);
 
   window.setTimeout(() => {
     toast.style.opacity = "0";
-    toast.style.transform = "translateX(12px)";
+    toast.style.transform =
+      "translateX(12px)";
 
     window.setTimeout(() => {
       toast.remove();
     }, 220);
   }, duration);
-}
+};
 
 /* =========================================================
-   9. MODAL SYSTEM
+   11. NAVIGATION
 ========================================================= */
 
-const getModalElements = () => ({
-  backdrop: getElement("#modal-backdrop"),
-  kicker: getElement("#modal-kicker"),
-  title: getElement("#modal-title"),
-  body: getElement("#modal-body"),
-  confirmButton: getElement("#modal-confirm-button")
-});
+const closeMobileSidebar = () => {
+  document.body.classList.remove(
+    "sidebar-open"
+  );
+};
+
+const updatePageHeader = (pageName) => {
+  const pageData =
+    PAGE_INFORMATION[pageName];
+
+  if (!pageData) {
+    return;
+  }
+
+  const title =
+    getElement("#page-title");
+
+  const eyebrow =
+    getElement("#page-eyebrow");
+
+  if (title) {
+    title.textContent = pageData.title;
+  }
+
+  if (eyebrow) {
+    eyebrow.textContent = pageData.eyebrow;
+  }
+
+  document.title =
+    `${pageData.title} | Refurbishment Quote System`;
+};
+
+const navigateToPage = (pageName) => {
+  const targetPage =
+    getElement(`[data-page="${pageName}"]`);
+
+  if (!targetPage) {
+    return;
+  }
+
+  getElements(".app-page").forEach(
+    (page) => {
+      page.classList.remove("active");
+    }
+  );
+
+  targetPage.classList.add("active");
+
+  getElements(
+    ".nav-item[data-page-target]"
+  ).forEach((button) => {
+    button.classList.toggle(
+      "active",
+      button.dataset.pageTarget === pageName
+    );
+  });
+
+  appState.currentPage = pageName;
+
+  updatePageHeader(pageName);
+  closeMobileSidebar();
+
+  if (pageName === "cost-pool") {
+    renderCostPool();
+  }
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+};
+
+const initializeNavigation = () => {
+  getElements("[data-page-target]").forEach(
+    (button) => {
+      safeAddEventListener(
+        button,
+        "click",
+        () => {
+          navigateToPage(
+            button.dataset.pageTarget
+          );
+        }
+      );
+    }
+  );
+
+  safeAddEventListener(
+    getElement("#brand-button"),
+    "click",
+    () => navigateToPage("dashboard")
+  );
+
+  safeAddEventListener(
+    getElement("#view-all-projects-button"),
+    "click",
+    () => navigateToPage("projects")
+  );
+};
+
+/* =========================================================
+   12. SIDEBAR
+========================================================= */
+
+const applySidebarState = () => {
+  document.body.classList.toggle(
+    "sidebar-collapsed",
+    appState.sidebarCollapsed
+  );
+};
+
+const initializeSidebar = () => {
+  appState.sidebarCollapsed =
+    localStorage.getItem(
+      STORAGE_KEYS.sidebarCollapsed
+    ) === "true";
+
+  applySidebarState();
+
+  safeAddEventListener(
+    getElement("#sidebar-collapse-button"),
+    "click",
+    () => {
+      if (window.innerWidth <= 1000) {
+        closeMobileSidebar();
+        return;
+      }
+
+      appState.sidebarCollapsed =
+        !appState.sidebarCollapsed;
+
+      localStorage.setItem(
+        STORAGE_KEYS.sidebarCollapsed,
+        String(appState.sidebarCollapsed)
+      );
+
+      applySidebarState();
+    }
+  );
+
+  safeAddEventListener(
+    getElement("#mobile-menu-button"),
+    "click",
+    () => {
+      document.body.classList.add(
+        "sidebar-open"
+      );
+    }
+  );
+
+  safeAddEventListener(
+    getElement("#sidebar-overlay"),
+    "click",
+    closeMobileSidebar
+  );
+
+  window.addEventListener(
+    "resize",
+    () => {
+      if (window.innerWidth > 1000) {
+        closeMobileSidebar();
+      }
+    }
+  );
+};
+
+/* =========================================================
+   13. THEME
+========================================================= */
+
+const updateThemeControls = () => {
+  const themeIcon =
+    getElement("#theme-toggle-icon");
+
+  if (themeIcon) {
+    themeIcon.textContent =
+      appState.currentTheme === "dark"
+        ? "☾"
+        : "☀";
+  }
+
+  getElements(
+    "[data-theme-choice]"
+  ).forEach((button) => {
+    button.classList.toggle(
+      "active",
+      button.dataset.themeChoice ===
+        appState.currentTheme
+    );
+  });
+};
+
+const applyTheme = (
+  theme,
+  savePreference = true
+) => {
+  const safeTheme =
+    theme === "light"
+      ? "light"
+      : "dark";
+
+  appState.currentTheme = safeTheme;
+
+  document.body.classList.toggle(
+    "light-theme",
+    safeTheme === "light"
+  );
+
+  if (savePreference) {
+    localStorage.setItem(
+      STORAGE_KEYS.theme,
+      safeTheme
+    );
+  }
+
+  updateThemeControls();
+};
+
+const initializeTheme = () => {
+  const savedTheme =
+    localStorage.getItem(
+      STORAGE_KEYS.theme
+    );
+
+  applyTheme(
+    savedTheme || "dark",
+    false
+  );
+
+  safeAddEventListener(
+    getElement("#theme-toggle-button"),
+    "click",
+    () => {
+      const nextTheme =
+        appState.currentTheme === "dark"
+          ? "light"
+          : "dark";
+
+      applyTheme(nextTheme);
+
+      showToast(
+        `${nextTheme === "dark" ? "Dark" : "Light"} theme enabled.`
+      );
+    }
+  );
+
+  getElements(
+    "[data-theme-choice]"
+  ).forEach((button) => {
+    safeAddEventListener(
+      button,
+      "click",
+      () => {
+        applyTheme(
+          button.dataset.themeChoice
+        );
+      }
+    );
+  });
+};
+
+/* =========================================================
+   14. MODAL SYSTEM
+========================================================= */
 
 const openModal = ({
   kicker = "NEW ITEM",
   title = "Dialog",
   content = "",
-  confirmText = "Continue",
+  confirmText = "Save",
   confirmHandler = null
 }) => {
-  const modal = getModalElements();
+  const backdrop =
+    getElement("#modal-backdrop");
+
+  const modalKicker =
+    getElement("#modal-kicker");
+
+  const modalTitle =
+    getElement("#modal-title");
+
+  const modalBody =
+    getElement("#modal-body");
+
+  const confirmButton =
+    getElement("#modal-confirm-button");
 
   if (
-    !modal.backdrop ||
-    !modal.kicker ||
-    !modal.title ||
-    !modal.body ||
-    !modal.confirmButton
+    !backdrop ||
+    !modalKicker ||
+    !modalTitle ||
+    !modalBody ||
+    !confirmButton
   ) {
     return;
   }
 
-  modal.kicker.textContent = kicker;
-  modal.title.textContent = title;
-  modal.body.innerHTML = content;
-  modal.confirmButton.textContent = confirmText;
+  modalKicker.textContent = kicker;
+  modalTitle.textContent = title;
+  modalBody.innerHTML = content;
+  confirmButton.textContent = confirmText;
 
-  appState.modalConfirmHandler = confirmHandler;
+  appState.modalConfirmHandler =
+    confirmHandler;
 
-  modal.backdrop.classList.add("active");
-  modal.backdrop.setAttribute("aria-hidden", "false");
+  backdrop.classList.add("active");
+
+  backdrop.setAttribute(
+    "aria-hidden",
+    "false"
+  );
 
   document.body.style.overflow = "hidden";
 
   window.setTimeout(() => {
-    const firstInput = modal.body.querySelector(
-      "input, select, textarea, button"
-    );
+    const firstField =
+      modalBody.querySelector(
+        "input, select, textarea, button"
+      );
 
-    if (firstInput) {
-      firstInput.focus();
-    }
+    firstField?.focus();
   }, 50);
 };
 
 const closeModal = () => {
-  const backdrop = getElement("#modal-backdrop");
+  const backdrop =
+    getElement("#modal-backdrop");
 
   if (!backdrop) {
     return;
   }
 
   backdrop.classList.remove("active");
-  backdrop.setAttribute("aria-hidden", "true");
+
+  backdrop.setAttribute(
+    "aria-hidden",
+    "true"
+  );
 
   document.body.style.overflow = "";
+
   appState.modalConfirmHandler = null;
+  appState.editingCostItemId = null;
+  appState.editingCategoryId = null;
 };
 
 const initializeModal = () => {
@@ -580,7 +983,10 @@ const initializeModal = () => {
     getElement("#modal-backdrop"),
     "click",
     (event) => {
-      if (event.target.id === "modal-backdrop") {
+      if (
+        event.target.id ===
+        "modal-backdrop"
+      ) {
         closeModal();
       }
     }
@@ -590,400 +996,1377 @@ const initializeModal = () => {
     getElement("#modal-confirm-button"),
     "click",
     () => {
-      if (typeof appState.modalConfirmHandler === "function") {
+      if (
+        typeof appState.modalConfirmHandler ===
+        "function"
+      ) {
         appState.modalConfirmHandler();
       }
     }
   );
 
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      closeModal();
-      closeMobileSidebar();
+  document.addEventListener(
+    "keydown",
+    (event) => {
+      if (event.key === "Escape") {
+        closeModal();
+        closeMobileSidebar();
+      }
     }
-  });
+  );
 };
 
 /* =========================================================
-   10. FORM FIELD TEMPLATES
+   15. COST CATEGORY RENDERING
 ========================================================= */
 
-const createProjectModalContent = () => `
-  <form id="new-project-form" class="settings-form">
-    <div class="form-field full-width">
-      <label for="new-project-name">Project Name</label>
-      <input
-        id="new-project-name"
-        name="projectName"
-        type="text"
-        placeholder="Example: Tineco S9 Refurbishment"
-        required
-      >
-    </div>
+const renderCostCategories = () => {
+  const container =
+    getElement("#cost-category-list");
 
-    <div class="form-field">
-      <label for="new-project-customer">Customer</label>
-      <input
-        id="new-project-customer"
-        name="customer"
-        type="text"
-        placeholder="Customer name"
-        required
-      >
-    </div>
+  if (!container) {
+    return;
+  }
 
-    <div class="form-field">
-      <label for="new-project-template">Template</label>
-      <select id="new-project-template" name="template">
-        <option value="">Blank Project</option>
-        <option value="floor-washer">
-          Floor Washer Refurbishment
-        </option>
-        <option value="vacuum">
-          Vacuum Refurbishment
-        </option>
-        <option value="inspection">
-          Bulk Return Inspection
-        </option>
-      </select>
-    </div>
+  const allCount =
+    appState.costItems.length;
 
-    <div class="form-field">
-      <label for="new-project-volume">Estimated Volume</label>
-      <input
-        id="new-project-volume"
-        name="volume"
-        type="number"
-        value="500"
-        min="1"
-        required
-      >
-    </div>
+  const allButton = `
+    <button
+      class="category-item ${
+        appState.selectedCostCategory === "all"
+          ? "active"
+          : ""
+      }"
+      type="button"
+      data-cost-category="all"
+    >
+      <span class="category-icon">▦</span>
+      <span class="category-name">All Costs</span>
+      <span class="category-count">${allCount}</span>
+    </button>
+  `;
 
-    <div class="form-field">
-      <label for="new-project-currency">Currency</label>
-      <select id="new-project-currency" name="currency">
-        <option value="CAD">CAD</option>
-        <option value="USD">USD</option>
-        <option value="CNY">CNY</option>
-      </select>
-    </div>
+  const categoryButtons =
+    appState.costCategories
+      .map((category) => {
+        const categoryCount =
+          appState.costItems.filter(
+            (item) =>
+              item.categoryId === category.id
+          ).length;
 
-    <div class="form-field full-width">
-      <label for="new-project-notes">Project Notes</label>
-      <textarea
-        id="new-project-notes"
-        name="notes"
-        rows="3"
-        placeholder="Add project requirements or SOP notes"
-      ></textarea>
-    </div>
-  </form>
-`;
+        return `
+          <button
+            class="category-item ${
+              appState.selectedCostCategory ===
+              category.id
+                ? "active"
+                : ""
+            }"
+            type="button"
+            data-cost-category="${escapeHtml(
+              category.id
+            )}"
+          >
+            <span
+              class="category-icon category-${escapeHtml(
+                category.colorClass
+              )}"
+            >
+              ${escapeHtml(category.abbreviation)}
+            </span>
 
-const createCostItemModalContent = () => `
-  <form id="new-cost-item-form" class="settings-form">
-    <div class="form-field full-width">
-      <label for="new-cost-name">Cost Item Name</label>
-      <input
-        id="new-cost-name"
-        name="costName"
-        type="text"
-        placeholder="Example: Senior Technician Labour"
-        required
-      >
-    </div>
+            <span class="category-name">
+              ${escapeHtml(category.name)}
+            </span>
 
-    <div class="form-field">
-      <label for="new-cost-category">Category</label>
-      <select id="new-cost-category" name="category">
-        <option value="labour">Labour</option>
-        <option value="parts">Parts</option>
-        <option value="packaging">Packaging</option>
-        <option value="logistics">Logistics</option>
-        <option value="equipment">Equipment</option>
-        <option value="overhead">Overhead</option>
-      </select>
-    </div>
+            <span class="category-count">
+              ${categoryCount}
+            </span>
+          </button>
+        `;
+      })
+      .join("");
 
-    <div class="form-field">
-      <label for="new-cost-type">Calculation Method</label>
-      <select id="new-cost-type" name="type">
-        <option value="hourly">Hourly</option>
-        <option value="per-unit">Per Unit</option>
-        <option value="fixed">Fixed</option>
-        <option value="percentage">Percentage</option>
-      </select>
-    </div>
+  container.innerHTML =
+    allButton + categoryButtons;
 
-    <div class="form-field">
-      <label for="new-cost-rate">Rate</label>
-      <input
-        id="new-cost-rate"
-        name="rate"
-        type="number"
-        min="0"
-        step="0.01"
-        value="0"
-        required
-      >
-    </div>
-
-    <div class="form-field">
-      <label for="new-cost-currency">Currency</label>
-      <select id="new-cost-currency" name="currency">
-        <option value="CAD">CAD</option>
-        <option value="USD">USD</option>
-        <option value="CNY">CNY</option>
-      </select>
-    </div>
-
-    <div class="form-field full-width">
-      <label for="new-cost-description">Description</label>
-      <textarea
-        id="new-cost-description"
-        name="description"
-        rows="3"
-        placeholder="Describe when this cost should be used"
-      ></textarea>
-    </div>
-  </form>
-`;
-
-const createTemplateModalContent = () => `
-  <form id="new-template-form" class="settings-form">
-    <div class="form-field full-width">
-      <label for="new-template-name">Template Name</label>
-      <input
-        id="new-template-name"
-        name="templateName"
-        type="text"
-        placeholder="Example: Electronics Refurbishment"
-        required
-      >
-    </div>
-
-    <div class="form-field">
-      <label for="new-template-type">Template Type</label>
-      <select id="new-template-type" name="templateType">
-        <option value="product-refurbishment">
-          Product Refurbishment
-        </option>
-        <option value="inspection-service">
-          Inspection Service
-        </option>
-        <option value="repair-only">
-          Repair Only
-        </option>
-        <option value="custom">Custom</option>
-      </select>
-    </div>
-
-    <div class="form-field">
-      <label for="new-template-start">Starting Point</label>
-      <select id="new-template-start" name="startingPoint">
-        <option value="blank">Blank Workflow</option>
-        <option value="standard">
-          Standard Refurbishment Steps
-        </option>
-        <option value="inspection">
-          Inspection Workflow
-        </option>
-      </select>
-    </div>
-
-    <div class="form-field full-width">
-      <label for="new-template-description">Description</label>
-      <textarea
-        id="new-template-description"
-        name="description"
-        rows="3"
-        placeholder="Describe the purpose of this template"
-      ></textarea>
-    </div>
-  </form>
-`;
-
-const createCustomerModalContent = () => `
-  <form id="new-customer-form" class="settings-form">
-    <div class="form-field full-width">
-      <label for="new-customer-name">Customer Name</label>
-      <input
-        id="new-customer-name"
-        name="customerName"
-        type="text"
-        placeholder="Customer or company name"
-        required
-      >
-    </div>
-
-    <div class="form-field">
-      <label for="new-customer-contact">Contact Person</label>
-      <input
-        id="new-customer-contact"
-        name="contact"
-        type="text"
-        placeholder="Contact name"
-      >
-    </div>
-
-    <div class="form-field">
-      <label for="new-customer-email">Email</label>
-      <input
-        id="new-customer-email"
-        name="email"
-        type="email"
-        placeholder="contact@company.com"
-      >
-    </div>
-
-    <div class="form-field full-width">
-      <label for="new-customer-notes">Notes</label>
-      <textarea
-        id="new-customer-notes"
-        name="notes"
-        rows="3"
-        placeholder="Customer requirements or account notes"
-      ></textarea>
-    </div>
-  </form>
-`;
-
-/* =========================================================
-   11. CREATE ACTIONS
-========================================================= */
-
-const openNewProjectModal = () => {
-  openModal({
-    kicker: "NEW PROJECT",
-    title: "Create Refurbishment Project",
-    content: createProjectModalContent(),
-    confirmText: "Create Project",
-    confirmHandler: () => {
-      const projectName =
-        getElement("#new-project-name")?.value.trim();
-
-      const customer =
-        getElement("#new-project-customer")?.value.trim();
-
-      if (!projectName || !customer) {
-        showToast(
-          "Enter both a project name and customer.",
-          "warning"
-        );
-        return;
-      }
-
-      closeModal();
-      navigateToPage("projects");
-
-      showToast(
-        `${projectName} was created as a demonstration project.`
-      );
-    }
-  });
-};
-
-const openNewCostItemModal = () => {
-  openModal({
-    kicker: "COST POOL",
-    title: "Add Cost Item",
-    content: createCostItemModalContent(),
-    confirmText: "Add Cost Item",
-    confirmHandler: () => {
-      const costName =
-        getElement("#new-cost-name")?.value.trim();
-
-      const rate = Number(
-        getElement("#new-cost-rate")?.value
-      );
-
-      if (!costName) {
-        showToast("Enter a cost item name.", "warning");
-        return;
-      }
-
-      if (!Number.isFinite(rate) || rate < 0) {
-        showToast("Enter a valid cost rate.", "warning");
-        return;
-      }
-
-      closeModal();
-      navigateToPage("cost-pool");
-
-      showToast(
-        `${costName} was added as a demonstration cost item.`
-      );
-    }
-  });
-};
-
-const openNewTemplateModal = () => {
-  openModal({
-    kicker: "PROCESS TEMPLATE",
-    title: "Create Template",
-    content: createTemplateModalContent(),
-    confirmText: "Create Template",
-    confirmHandler: () => {
-      const templateName =
-        getElement("#new-template-name")?.value.trim();
-
-      if (!templateName) {
-        showToast("Enter a template name.", "warning");
-        return;
-      }
-
-      closeModal();
-      navigateToPage("templates");
-
-      showToast(
-        `${templateName} was created as a demonstration template.`
-      );
-    }
-  });
-};
-
-const openNewCustomerModal = () => {
-  openModal({
-    kicker: "CUSTOMER DIRECTORY",
-    title: "Add Customer",
-    content: createCustomerModalContent(),
-    confirmText: "Add Customer",
-    confirmHandler: () => {
-      const customerName =
-        getElement("#new-customer-name")?.value.trim();
-
-      if (!customerName) {
-        showToast("Enter a customer name.", "warning");
-        return;
-      }
-
-      closeModal();
-      navigateToPage("customers");
-
-      showToast(
-        `${customerName} was added as a demonstration customer.`
-      );
-    }
-  });
-};
-
-const initializeCreateActions = () => {
-  [
-    "#new-quote-button",
-    "#dashboard-create-quote-button",
-    "#quick-new-project-button",
-    "#projects-create-project-button"
-  ].forEach((selector) => {
+  getElements(
+    "[data-cost-category]"
+  ).forEach((button) => {
     safeAddEventListener(
-      getElement(selector),
+      button,
       "click",
-      openNewProjectModal
+      () => {
+        appState.selectedCostCategory =
+          button.dataset.costCategory ||
+          "all";
+
+        renderCostPool();
+      }
+    );
+  });
+};
+
+/* =========================================================
+   16. COST ITEM FILTERING AND SORTING
+========================================================= */
+
+const getFilteredCostItems = () => {
+  const searchText =
+    normalizeSearchValue(
+      appState.costSearchText
+    );
+
+  let items =
+    appState.costItems.filter((item) => {
+      const searchableText =
+        normalizeSearchValue(
+          [
+            item.name,
+            item.description,
+            getCategoryName(
+              item.categoryId
+            ),
+            item.calculationMethod,
+            item.currency,
+            item.status
+          ].join(" ")
+        );
+
+      const matchesSearch =
+        !searchText ||
+        searchableText.includes(searchText);
+
+      const matchesCategory =
+        appState.selectedCostCategory ===
+          "all" ||
+        item.categoryId ===
+          appState.selectedCostCategory;
+
+      const matchesMethod =
+        appState.selectedCostMethod ===
+          "all" ||
+        item.calculationMethod ===
+          appState.selectedCostMethod;
+
+      const matchesStatus =
+        appState.selectedCostStatus ===
+          "all" ||
+        item.status ===
+          appState.selectedCostStatus;
+
+      return (
+        matchesSearch &&
+        matchesCategory &&
+        matchesMethod &&
+        matchesStatus
+      );
+    });
+
+  items = [...items];
+
+  switch (appState.costSortMethod) {
+    case "name-asc":
+      items.sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+      break;
+
+    case "rate-desc":
+      items.sort(
+        (a, b) =>
+          Number(b.rate) -
+          Number(a.rate)
+      );
+      break;
+
+    case "rate-asc":
+      items.sort(
+        (a, b) =>
+          Number(a.rate) -
+          Number(b.rate)
+      );
+      break;
+
+    case "category-asc":
+      items.sort((a, b) =>
+        getCategoryName(
+          a.categoryId
+        ).localeCompare(
+          getCategoryName(
+            b.categoryId
+          )
+        )
+      );
+      break;
+
+    case "updated-desc":
+    default:
+      items.sort(
+        (a, b) =>
+          new Date(b.updatedAt).getTime() -
+          new Date(a.updatedAt).getTime()
+      );
+      break;
+  }
+
+  return items;
+};
+
+/* =========================================================
+   17. COST ITEM CARD RENDERING
+========================================================= */
+
+const renderCostCards = () => {
+  const container =
+    getElement("#cost-card-grid");
+
+  const emptyState =
+    getElement("#cost-pool-empty-state");
+
+  const resultsText =
+    getElement("#cost-results-text");
+
+  if (!container) {
+    return;
+  }
+
+  const filteredItems =
+    getFilteredCostItems();
+
+  if (resultsText) {
+    resultsText.textContent =
+      `Showing ${filteredItems.length} of ${appState.costItems.length} cost items`;
+  }
+
+  if (filteredItems.length === 0) {
+    container.innerHTML = "";
+
+    if (emptyState) {
+      emptyState.hidden = false;
+    }
+
+    return;
+  }
+
+  if (emptyState) {
+    emptyState.hidden = true;
+  }
+
+  container.innerHTML =
+    filteredItems
+      .map((item) => {
+        const category =
+          getCategoryById(
+            item.categoryId
+          );
+
+        const categoryClass =
+          category?.colorClass ||
+          "overhead";
+
+        const abbreviation =
+          category?.abbreviation ||
+          "C";
+
+        const statusLabel =
+          item.status === "active"
+            ? "Active"
+            : "Inactive";
+
+        return `
+          <article
+            class="cost-card"
+            data-cost-card-id="${escapeHtml(
+              item.id
+            )}"
+          >
+            <div class="cost-card-header">
+              <span
+                class="cost-card-category ${escapeHtml(
+                  categoryClass
+                )}"
+              >
+                ${escapeHtml(
+                  category?.name ||
+                    "Uncategorized"
+                )}
+              </span>
+
+              <span
+                class="status-badge ${
+                  item.status === "active"
+                    ? "approved"
+                    : "draft"
+                }"
+              >
+                ${statusLabel}
+              </span>
+            </div>
+
+            <div class="cost-card-main">
+              <span
+                class="cost-card-icon ${escapeHtml(
+                  categoryClass
+                )}"
+              >
+                ${escapeHtml(abbreviation)}
+              </span>
+
+              <div>
+                <h3>${escapeHtml(
+                  item.name
+                )}</h3>
+
+                <p>
+                  ${escapeHtml(
+                    item.description ||
+                      "No description provided."
+                  )}
+                </p>
+              </div>
+            </div>
+
+            <dl class="cost-card-details">
+              <div>
+                <dt>Rate</dt>
+
+                <dd>
+                  ${escapeHtml(
+                    formatRate(item)
+                  )}
+                </dd>
+              </div>
+
+              <div>
+                <dt>Method</dt>
+
+                <dd>
+                  ${escapeHtml(
+                    formatCalculationMethod(
+                      item.calculationMethod
+                    )
+                  )}
+                </dd>
+              </div>
+
+              <div>
+                <dt>Default Quantity</dt>
+
+                <dd>
+                  ${escapeHtml(
+                    `${item.defaultQuantity ?? 1} ${
+                      item.quantityUnit ||
+                      "unit"
+                    }`
+                  )}
+                </dd>
+              </div>
+
+              <div>
+                <dt>Currency</dt>
+
+                <dd>
+                  ${escapeHtml(
+                    item.currency ||
+                      "CAD"
+                  )}
+                </dd>
+              </div>
+            </dl>
+
+            <div class="cost-card-footer">
+              <span>
+                Updated ${escapeHtml(
+                  formatDate(
+                    item.updatedAt
+                  )
+                )}
+              </span>
+
+              <div class="cost-card-actions">
+                <button
+                  class="text-button edit-cost-button"
+                  type="button"
+                  data-edit-cost-id="${escapeHtml(
+                    item.id
+                  )}"
+                >
+                  Edit
+                </button>
+
+                <button
+                  class="text-button delete-cost-button"
+                  type="button"
+                  data-delete-cost-id="${escapeHtml(
+                    item.id
+                  )}"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </article>
+        `;
+      })
+      .join("");
+
+  getElements(
+    "[data-edit-cost-id]"
+  ).forEach((button) => {
+    safeAddEventListener(
+      button,
+      "click",
+      () => {
+        openEditCostItemModal(
+          button.dataset.editCostId
+        );
+      }
     );
   });
 
+  getElements(
+    "[data-delete-cost-id]"
+  ).forEach((button) => {
+    safeAddEventListener(
+      button,
+      "click",
+      () => {
+        confirmDeleteCostItem(
+          button.dataset.deleteCostId
+        );
+      }
+    );
+  });
+};
+
+/* =========================================================
+   18. COST POOL SUMMARY
+========================================================= */
+
+const updateCostPoolSummary = () => {
+  const totalItems =
+    appState.costItems.length;
+
+  const usedCategories =
+    new Set(
+      appState.costItems.map(
+        (item) => item.categoryId
+      )
+    ).size;
+
+  const labourCount =
+    appState.costItems.filter(
+      (item) =>
+        item.categoryId === "labour"
+    ).length;
+
+  const latestDate =
+    appState.costItems
+      .map((item) =>
+        new Date(item.updatedAt)
+      )
+      .filter(
+        (date) =>
+          !Number.isNaN(date.getTime())
+      )
+      .sort(
+        (a, b) =>
+          b.getTime() - a.getTime()
+      )[0];
+
+  const totalElement =
+    getElement("#cost-pool-total-items");
+
+  const categoriesElement =
+    getElement(
+      "#cost-pool-total-categories"
+    );
+
+  const labourElement =
+    getElement(
+      "#cost-pool-labour-count"
+    );
+
+  const updatedElement =
+    getElement(
+      "#cost-pool-last-updated"
+    );
+
+  if (totalElement) {
+    totalElement.textContent =
+      String(totalItems);
+  }
+
+  if (categoriesElement) {
+    categoriesElement.textContent =
+      String(usedCategories);
+  }
+
+  if (labourElement) {
+    labourElement.textContent =
+      String(labourCount);
+  }
+
+  if (updatedElement) {
+    updatedElement.textContent =
+      latestDate
+        ? formatDate(latestDate)
+        : "—";
+  }
+};
+
+/* =========================================================
+   19. COMPLETE COST POOL RENDER
+========================================================= */
+
+const renderCostPool = () => {
+  renderCostCategories();
+  renderCostCards();
+  updateCostPoolSummary();
+};
+
+/* =========================================================
+   20. COST ITEM FORM
+========================================================= */
+
+const buildCategoryOptions = (
+  selectedCategoryId = ""
+) =>
+  appState.costCategories
+    .map(
+      (category) => `
+        <option
+          value="${escapeHtml(
+            category.id
+          )}"
+          ${
+            category.id ===
+            selectedCategoryId
+              ? "selected"
+              : ""
+          }
+        >
+          ${escapeHtml(category.name)}
+        </option>
+      `
+    )
+    .join("");
+
+const createCostItemForm = (
+  item = {}
+) => {
+  const costItem = {
+    name: "",
+    categoryId:
+      appState.costCategories[0]?.id ||
+      "labour",
+    calculationMethod: "hourly",
+    rate: 0,
+    currency: "CAD",
+    unit: "hour",
+    defaultQuantity: 1,
+    quantityUnit: "unit",
+    description: "",
+    status: "active",
+    ...item
+  };
+
+  return `
+    <form
+      id="cost-item-form"
+      class="settings-form"
+    >
+      <div class="form-field full-width">
+        <label for="cost-item-name">
+          Cost Item Name
+        </label>
+
+        <input
+          id="cost-item-name"
+          type="text"
+          value="${escapeHtml(
+            costItem.name
+          )}"
+          placeholder="Example: Senior Technician Labour"
+          required
+        >
+      </div>
+
+      <div class="form-field">
+        <label for="cost-item-category">
+          Category
+        </label>
+
+        <select id="cost-item-category">
+          ${buildCategoryOptions(
+            costItem.categoryId
+          )}
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label for="cost-item-method">
+          Calculation Method
+        </label>
+
+        <select id="cost-item-method">
+          <option
+            value="hourly"
+            ${
+              costItem.calculationMethod ===
+              "hourly"
+                ? "selected"
+                : ""
+            }
+          >
+            Hourly
+          </option>
+
+          <option
+            value="per-minute"
+            ${
+              costItem.calculationMethod ===
+              "per-minute"
+                ? "selected"
+                : ""
+            }
+          >
+            Per minute
+          </option>
+
+          <option
+            value="per-unit"
+            ${
+              costItem.calculationMethod ===
+              "per-unit"
+                ? "selected"
+                : ""
+            }
+          >
+            Per unit
+          </option>
+
+          <option
+            value="fixed"
+            ${
+              costItem.calculationMethod ===
+              "fixed"
+                ? "selected"
+                : ""
+            }
+          >
+            Fixed cost
+          </option>
+
+          <option
+            value="monthly"
+            ${
+              costItem.calculationMethod ===
+              "monthly"
+                ? "selected"
+                : ""
+            }
+          >
+            Monthly
+          </option>
+
+          <option
+            value="percentage"
+            ${
+              costItem.calculationMethod ===
+              "percentage"
+                ? "selected"
+                : ""
+            }
+          >
+            Percentage
+          </option>
+
+          <option
+            value="per-shipment"
+            ${
+              costItem.calculationMethod ===
+              "per-shipment"
+                ? "selected"
+                : ""
+            }
+          >
+            Per shipment
+          </option>
+
+          <option
+            value="per-pallet"
+            ${
+              costItem.calculationMethod ===
+              "per-pallet"
+                ? "selected"
+                : ""
+            }
+          >
+            Per pallet
+          </option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label for="cost-item-rate">
+          Rate
+        </label>
+
+        <input
+          id="cost-item-rate"
+          type="number"
+          min="0"
+          step="0.01"
+          value="${escapeHtml(
+            costItem.rate
+          )}"
+          required
+        >
+      </div>
+
+      <div class="form-field">
+        <label for="cost-item-currency">
+          Currency
+        </label>
+
+        <select id="cost-item-currency">
+          <option
+            value="CAD"
+            ${
+              costItem.currency === "CAD"
+                ? "selected"
+                : ""
+            }
+          >
+            CAD
+          </option>
+
+          <option
+            value="USD"
+            ${
+              costItem.currency === "USD"
+                ? "selected"
+                : ""
+            }
+          >
+            USD
+          </option>
+
+          <option
+            value="CNY"
+            ${
+              costItem.currency === "CNY"
+                ? "selected"
+                : ""
+            }
+          >
+            CNY
+          </option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label for="cost-item-default-quantity">
+          Default Quantity
+        </label>
+
+        <input
+          id="cost-item-default-quantity"
+          type="number"
+          min="0"
+          step="0.01"
+          value="${escapeHtml(
+            costItem.defaultQuantity
+          )}"
+        >
+      </div>
+
+      <div class="form-field">
+        <label for="cost-item-quantity-unit">
+          Quantity Unit
+        </label>
+
+        <input
+          id="cost-item-quantity-unit"
+          type="text"
+          value="${escapeHtml(
+            costItem.quantityUnit
+          )}"
+          placeholder="minutes, units, hours..."
+        >
+      </div>
+
+      <div class="form-field">
+        <label for="cost-item-unit">
+          Rate Unit
+        </label>
+
+        <input
+          id="cost-item-unit"
+          type="text"
+          value="${escapeHtml(
+            costItem.unit
+          )}"
+          placeholder="hour, unit, month..."
+        >
+      </div>
+
+      <div class="form-field">
+        <label for="cost-item-status">
+          Status
+        </label>
+
+        <select id="cost-item-status">
+          <option
+            value="active"
+            ${
+              costItem.status === "active"
+                ? "selected"
+                : ""
+            }
+          >
+            Active
+          </option>
+
+          <option
+            value="inactive"
+            ${
+              costItem.status === "inactive"
+                ? "selected"
+                : ""
+            }
+          >
+            Inactive
+          </option>
+        </select>
+      </div>
+
+      <div class="form-field full-width">
+        <label for="cost-item-description">
+          Description
+        </label>
+
+        <textarea
+          id="cost-item-description"
+          rows="3"
+          placeholder="Describe when this cost should be used"
+        >${escapeHtml(
+          costItem.description
+        )}</textarea>
+      </div>
+    </form>
+  `;
+};
+
+/* =========================================================
+   21. READ COST ITEM FORM
+========================================================= */
+
+const readCostItemForm = () => {
+  const name =
+    getElement(
+      "#cost-item-name"
+    )?.value.trim();
+
+  const categoryId =
+    getElement(
+      "#cost-item-category"
+    )?.value;
+
+  const calculationMethod =
+    getElement(
+      "#cost-item-method"
+    )?.value;
+
+  const rate =
+    Number(
+      getElement(
+        "#cost-item-rate"
+      )?.value
+    );
+
+  const currency =
+    getElement(
+      "#cost-item-currency"
+    )?.value;
+
+  const defaultQuantity =
+    Number(
+      getElement(
+        "#cost-item-default-quantity"
+      )?.value
+    );
+
+  const quantityUnit =
+    getElement(
+      "#cost-item-quantity-unit"
+    )?.value.trim();
+
+  const unit =
+    getElement(
+      "#cost-item-unit"
+    )?.value.trim();
+
+  const status =
+    getElement(
+      "#cost-item-status"
+    )?.value;
+
+  const description =
+    getElement(
+      "#cost-item-description"
+    )?.value.trim();
+
+  if (!name) {
+    showToast(
+      "Enter a cost item name.",
+      "warning"
+    );
+
+    return null;
+  }
+
+  if (!categoryId) {
+    showToast(
+      "Select a category.",
+      "warning"
+    );
+
+    return null;
+  }
+
+  if (
+    !Number.isFinite(rate) ||
+    rate < 0
+  ) {
+    showToast(
+      "Enter a valid cost rate.",
+      "warning"
+    );
+
+    return null;
+  }
+
+  if (
+    !Number.isFinite(
+      defaultQuantity
+    ) ||
+    defaultQuantity < 0
+  ) {
+    showToast(
+      "Enter a valid default quantity.",
+      "warning"
+    );
+
+    return null;
+  }
+
+  return {
+    name,
+    categoryId,
+    calculationMethod,
+    rate,
+    currency,
+    defaultQuantity,
+    quantityUnit:
+      quantityUnit || "unit",
+    unit: unit || "unit",
+    status,
+    description
+  };
+};
+
+/* =========================================================
+   22. CREATE COST ITEM
+========================================================= */
+
+const openNewCostItemModal = () => {
+  appState.editingCostItemId = null;
+
+  openModal({
+    kicker: "COST POOL",
+    title: "Add Cost Item",
+    content: createCostItemForm(),
+    confirmText: "Add Cost Item",
+
+    confirmHandler: () => {
+      const formData =
+        readCostItemForm();
+
+      if (!formData) {
+        return;
+      }
+
+      const newItem = {
+        id: createId("cost"),
+        ...formData,
+        updatedAt:
+          new Date().toISOString()
+      };
+
+      appState.costItems.push(newItem);
+
+      saveCostPoolData();
+      closeModal();
+      renderCostPool();
+
+      showToast(
+        `${newItem.name} was added to the Cost Pool.`
+      );
+    }
+  });
+};
+
+/* =========================================================
+   23. EDIT COST ITEM
+========================================================= */
+
+const openEditCostItemModal = (
+  costItemId
+) => {
+  const item =
+    appState.costItems.find(
+      (costItem) =>
+        costItem.id === costItemId
+    );
+
+  if (!item) {
+    showToast(
+      "The selected cost item was not found.",
+      "error"
+    );
+
+    return;
+  }
+
+  appState.editingCostItemId =
+    costItemId;
+
+  openModal({
+    kicker: "COST POOL",
+    title: `Edit ${item.name}`,
+    content: createCostItemForm(item),
+    confirmText: "Save Changes",
+
+    confirmHandler: () => {
+      const formData =
+        readCostItemForm();
+
+      if (!formData) {
+        return;
+      }
+
+      const itemIndex =
+        appState.costItems.findIndex(
+          (costItem) =>
+            costItem.id === costItemId
+        );
+
+      if (itemIndex === -1) {
+        showToast(
+          "The cost item could not be updated.",
+          "error"
+        );
+
+        return;
+      }
+
+      appState.costItems[itemIndex] = {
+        ...appState.costItems[itemIndex],
+        ...formData,
+        updatedAt:
+          new Date().toISOString()
+      };
+
+      const updatedName =
+        appState.costItems[itemIndex].name;
+
+      saveCostPoolData();
+      closeModal();
+      renderCostPool();
+
+      showToast(
+        `${updatedName} was updated.`
+      );
+    }
+  });
+};
+
+/* =========================================================
+   24. DELETE COST ITEM
+========================================================= */
+
+const confirmDeleteCostItem = (
+  costItemId
+) => {
+  const item =
+    appState.costItems.find(
+      (costItem) =>
+        costItem.id === costItemId
+    );
+
+  if (!item) {
+    return;
+  }
+
+  openModal({
+    kicker: "DELETE COST ITEM",
+    title: `Delete ${item.name}?`,
+
+    content: `
+      <p>
+        This cost item will be removed from the Cost Pool.
+      </p>
+
+      <p>
+        Existing project costs will be handled separately when
+        project versioning is added.
+      </p>
+    `,
+
+    confirmText: "Delete Cost Item",
+
+    confirmHandler: () => {
+      appState.costItems =
+        appState.costItems.filter(
+          (costItem) =>
+            costItem.id !== costItemId
+        );
+
+      saveCostPoolData();
+      closeModal();
+      renderCostPool();
+
+      showToast(
+        `${item.name} was deleted.`,
+        "warning"
+      );
+    }
+  });
+};
+
+/* =========================================================
+   25. CATEGORY CREATION
+========================================================= */
+
+const openNewCategoryModal = () => {
+  openModal({
+    kicker: "COST POOL",
+    title: "Create Cost Category",
+
+    content: `
+      <form
+        id="category-form"
+        class="settings-form"
+      >
+        <div class="form-field full-width">
+          <label for="category-name">
+            Category Name
+          </label>
+
+          <input
+            id="category-name"
+            type="text"
+            placeholder="Example: Consumables"
+            required
+          >
+        </div>
+
+        <div class="form-field">
+          <label for="category-abbreviation">
+            Abbreviation
+          </label>
+
+          <input
+            id="category-abbreviation"
+            type="text"
+            maxlength="3"
+            placeholder="CON"
+          >
+        </div>
+
+        <div class="form-field">
+          <label for="category-color">
+            Colour Group
+          </label>
+
+          <select id="category-color">
+            <option value="labour">
+              Blue
+            </option>
+
+            <option value="parts">
+              Green
+            </option>
+
+            <option value="packaging">
+              Purple
+            </option>
+
+            <option value="logistics">
+              Orange
+            </option>
+
+            <option value="equipment">
+              Pink
+            </option>
+
+            <option value="overhead">
+              Grey
+            </option>
+          </select>
+        </div>
+      </form>
+    `,
+
+    confirmText: "Create Category",
+
+    confirmHandler: () => {
+      const name =
+        getElement(
+          "#category-name"
+        )?.value.trim();
+
+      const abbreviationInput =
+        getElement(
+          "#category-abbreviation"
+        )?.value.trim();
+
+      const colorClass =
+        getElement(
+          "#category-color"
+        )?.value || "overhead";
+
+      if (!name) {
+        showToast(
+          "Enter a category name.",
+          "warning"
+        );
+
+        return;
+      }
+
+      const duplicate =
+        appState.costCategories.some(
+          (category) =>
+            normalizeSearchValue(
+              category.name
+            ) ===
+            normalizeSearchValue(name)
+        );
+
+      if (duplicate) {
+        showToast(
+          "A category with this name already exists.",
+          "warning"
+        );
+
+        return;
+      }
+
+      const abbreviation =
+        abbreviationInput ||
+        name
+          .split(/\s+/)
+          .map((word) => word[0])
+          .join("")
+          .slice(0, 3)
+          .toUpperCase();
+
+      const newCategory = {
+        id: createId("category"),
+        name,
+        abbreviation,
+        colorClass,
+        builtIn: false
+      };
+
+      appState.costCategories.push(
+        newCategory
+      );
+
+      saveCostPoolData();
+      closeModal();
+      renderCostPool();
+
+      showToast(
+        `${name} category was created.`
+      );
+    }
+  });
+};
+
+/* =========================================================
+   26. CLEAR COST FILTERS
+========================================================= */
+
+const clearCostFilters = () => {
+  appState.selectedCostCategory =
+    "all";
+
+  appState.selectedCostMethod =
+    "all";
+
+  appState.selectedCostStatus =
+    "all";
+
+  appState.costSearchText = "";
+
+  appState.costSortMethod =
+    "updated-desc";
+
+  const searchInput =
+    getElement(
+      "#cost-pool-search-input"
+    );
+
+  const methodFilter =
+    getElement(
+      "#cost-type-filter"
+    );
+
+  const statusFilter =
+    getElement(
+      "#cost-status-filter"
+    );
+
+  const sortFilter =
+    getElement(
+      "#cost-sort-select"
+    );
+
+  if (searchInput) {
+    searchInput.value = "";
+  }
+
+  if (methodFilter) {
+    methodFilter.value = "all";
+  }
+
+  if (statusFilter) {
+    statusFilter.value = "all";
+  }
+
+  if (sortFilter) {
+    sortFilter.value =
+      "updated-desc";
+  }
+
+  renderCostPool();
+};
+
+/* =========================================================
+   27. COST POOL EVENTS
+========================================================= */
+
+const initializeCostPoolEvents = () => {
   [
-    "#add-cost-item-button"
+    "#add-cost-item-button",
+    "#empty-state-add-cost-button"
   ].forEach((selector) => {
     safeAddEventListener(
       getElement(selector),
@@ -993,233 +2376,68 @@ const initializeCreateActions = () => {
   });
 
   [
-    "#create-template-button",
-    "#empty-create-template-button"
+    "#add-cost-category-button",
+    "#category-panel-add-button"
   ].forEach((selector) => {
     safeAddEventListener(
       getElement(selector),
       "click",
-      openNewTemplateModal
+      openNewCategoryModal
     );
   });
 
   safeAddEventListener(
-    getElement("#add-customer-button"),
-    "click",
-    openNewCustomerModal
-  );
-
-  safeAddEventListener(
-    getElement("#add-cost-category-button"),
-    "click",
-    () => {
-      openModal({
-        kicker: "COST POOL",
-        title: "Create Cost Category",
-        content: `
-          <div class="form-field">
-            <label for="new-category-name">Category Name</label>
-            <input
-              id="new-category-name"
-              type="text"
-              placeholder="Example: Consumables"
-            >
-          </div>
-        `,
-        confirmText: "Create Category",
-        confirmHandler: () => {
-          const categoryName =
-            getElement("#new-category-name")?.value.trim();
-
-          if (!categoryName) {
-            showToast("Enter a category name.", "warning");
-            return;
-          }
-
-          closeModal();
-          showToast(
-            `${categoryName} was created as a demonstration category.`
-          );
-        }
-      });
-    }
-  );
-};
-
-/* =========================================================
-   12. PROJECT FILTERING
-========================================================= */
-
-const filterProjectCards = () => {
-  const searchValue = normalizeSearchValue(
-    getElement("#project-search-input")?.value
-  );
-
-  const selectedStatus =
-    getElement("#project-status-filter")?.value || "all";
-
-  const projectCards = getElements("[data-project-card]");
-
-  let visibleCount = 0;
-
-  projectCards.forEach((card) => {
-    const cardText = normalizeSearchValue(card.textContent);
-    const cardStatus = card.dataset.status || "";
-
-    const matchesSearch =
-      !searchValue || cardText.includes(searchValue);
-
-    const matchesStatus =
-      selectedStatus === "all" ||
-      cardStatus === selectedStatus;
-
-    const shouldShow = matchesSearch && matchesStatus;
-
-    card.classList.toggle("is-hidden", !shouldShow);
-
-    if (shouldShow) {
-      visibleCount += 1;
-    }
-  });
-
-  if (visibleCount === 0) {
-    showToast("No projects match the selected filters.", "warning");
-  }
-};
-
-const sortProjectCards = () => {
-  const grid = getElement("#project-card-grid");
-  const sortValue =
-    getElement("#project-sort-select")?.value;
-
-  if (!grid || !sortValue) {
-    return;
-  }
-
-  const cards = getElements("[data-project-card]");
-
-  cards.sort((firstCard, secondCard) => {
-    const firstName =
-      firstCard.querySelector("h3")?.textContent.trim() || "";
-
-    const secondName =
-      secondCard.querySelector("h3")?.textContent.trim() || "";
-
-    if (sortValue === "name-asc") {
-      return firstName.localeCompare(secondName);
-    }
-
-    return 0;
-  });
-
-  cards.forEach((card) => {
-    grid.appendChild(card);
-  });
-
-  if (sortValue !== "name-asc") {
-    showToast(
-      "Advanced project sorting will be connected in the data milestone."
-    );
-  }
-};
-
-const initializeProjectFilters = () => {
-  safeAddEventListener(
-    getElement("#project-search-input"),
+    getElement(
+      "#cost-pool-search-input"
+    ),
     "input",
-    filterProjectCards
-  );
+    (event) => {
+      appState.costSearchText =
+        event.target.value;
 
-  safeAddEventListener(
-    getElement("#project-status-filter"),
-    "change",
-    filterProjectCards
-  );
-
-  safeAddEventListener(
-    getElement("#project-sort-select"),
-    "change",
-    sortProjectCards
-  );
-
-  safeAddEventListener(
-    getElement("#project-view-toggle"),
-    "click",
-    () => {
-      showToast(
-        "List and grid view switching will be added with project storage."
-      );
+      renderCostCards();
     }
-  );
-};
-
-/* =========================================================
-   13. COST POOL FILTERING
-========================================================= */
-
-const filterCostCards = () => {
-  const searchValue = normalizeSearchValue(
-    getElement("#cost-pool-search-input")?.value
-  );
-
-  const selectedType =
-    getElement("#cost-type-filter")?.value || "all";
-
-  const selectedCategory =
-    appState.selectedCostCategory || "all";
-
-  getElements("[data-cost-card]").forEach((card) => {
-    const cardText = normalizeSearchValue(card.textContent);
-    const cardCategory = card.dataset.category || "";
-    const cardType = card.dataset.costType || "";
-
-    const matchesSearch =
-      !searchValue || cardText.includes(searchValue);
-
-    const matchesCategory =
-      selectedCategory === "all" ||
-      cardCategory === selectedCategory;
-
-    const matchesType =
-      selectedType === "all" ||
-      cardType === selectedType;
-
-    card.classList.toggle(
-      "is-hidden",
-      !(matchesSearch && matchesCategory && matchesType)
-    );
-  });
-};
-
-const initializeCostPoolFilters = () => {
-  getElements("[data-cost-category]").forEach((button) => {
-    safeAddEventListener(button, "click", () => {
-      appState.selectedCostCategory =
-        button.dataset.costCategory || "all";
-
-      getElements("[data-cost-category]").forEach(
-        (categoryButton) => {
-          categoryButton.classList.toggle(
-            "active",
-            categoryButton === button
-          );
-        }
-      );
-
-      filterCostCards();
-    });
-  });
-
-  safeAddEventListener(
-    getElement("#cost-pool-search-input"),
-    "input",
-    filterCostCards
   );
 
   safeAddEventListener(
     getElement("#cost-type-filter"),
     "change",
-    filterCostCards
+    (event) => {
+      appState.selectedCostMethod =
+        event.target.value;
+
+      renderCostCards();
+    }
+  );
+
+  safeAddEventListener(
+    getElement("#cost-status-filter"),
+    "change",
+    (event) => {
+      appState.selectedCostStatus =
+        event.target.value;
+
+      renderCostCards();
+    }
+  );
+
+  safeAddEventListener(
+    getElement("#cost-sort-select"),
+    "change",
+    (event) => {
+      appState.costSortMethod =
+        event.target.value;
+
+      renderCostCards();
+    }
+  );
+
+  safeAddEventListener(
+    getElement(
+      "#clear-cost-filters-button"
+    ),
+    "click",
+    clearCostFilters
   );
 
   safeAddEventListener(
@@ -1227,232 +2445,240 @@ const initializeCostPoolFilters = () => {
     "click",
     () => {
       showToast(
-        "Cost list view will be added in the Cost Pool milestone."
+        "List view will be added after the Cost Pool table design is approved."
       );
     }
   );
-
-  getElements(".edit-cost-button").forEach((button) => {
-    safeAddEventListener(button, "click", () => {
-      const costCard = button.closest(".cost-card");
-      const costName =
-        costCard?.querySelector("h3")?.textContent.trim() ||
-        "Cost Item";
-
-      openModal({
-        kicker: "COST POOL",
-        title: `Edit ${costName}`,
-        content: `
-          <p>
-            Editing and permanently saving Cost Pool items will be
-            connected in Milestone 2.
-          </p>
-
-          <div class="form-field">
-            <label for="demo-cost-name">Cost Item Name</label>
-            <input
-              id="demo-cost-name"
-              type="text"
-              value="${escapeHtml(costName)}"
-            >
-          </div>
-        `,
-        confirmText: "Save Demo Change",
-        confirmHandler: () => {
-          closeModal();
-          showToast(
-            `${costName} demo changes were accepted.`
-          );
-        }
-      });
-    });
-  });
 };
 
 /* =========================================================
-   14. CUSTOMER SEARCH
+   28. PROJECT FILTERS
 ========================================================= */
 
-const initializeCustomerSearch = () => {
+const filterProjectCards = () => {
+  const searchValue =
+    normalizeSearchValue(
+      getElement(
+        "#project-search-input"
+      )?.value
+    );
+
+  const selectedStatus =
+    getElement(
+      "#project-status-filter"
+    )?.value || "all";
+
+  getElements(
+    "[data-project-card]"
+  ).forEach((card) => {
+    const cardText =
+      normalizeSearchValue(
+        card.textContent
+      );
+
+    const cardStatus =
+      card.dataset.status || "";
+
+    const matchesSearch =
+      !searchValue ||
+      cardText.includes(searchValue);
+
+    const matchesStatus =
+      selectedStatus === "all" ||
+      selectedStatus === cardStatus;
+
+    card.classList.toggle(
+      "is-hidden",
+      !(
+        matchesSearch &&
+        matchesStatus
+      )
+    );
+  });
+};
+
+const initializeProjectFilters = () => {
   safeAddEventListener(
-    getElement("#customer-search-input"),
+    getElement(
+      "#project-search-input"
+    ),
     "input",
-    (event) => {
-      const searchValue = normalizeSearchValue(
-        event.target.value
+    filterProjectCards
+  );
+
+  safeAddEventListener(
+    getElement(
+      "#project-status-filter"
+    ),
+    "change",
+    filterProjectCards
+  );
+
+  safeAddEventListener(
+    getElement(
+      "#project-view-toggle"
+    ),
+    "click",
+    () => {
+      showToast(
+        "Project list view will be added in the Project milestone."
       );
-
-      getElements(".customer-card").forEach((card) => {
-        const matches = normalizeSearchValue(
-          card.textContent
-        ).includes(searchValue);
-
-        card.classList.toggle(
-          "is-hidden",
-          searchValue && !matches
-        );
-      });
     }
   );
 };
 
 /* =========================================================
-   15. SETTINGS NAVIGATION
+   29. SETTINGS PANELS
 ========================================================= */
 
-const switchSettingsPanel = (panelName) => {
-  const targetPanel = getElement(
-    `[data-settings-content="${panelName}"]`
-  );
-
-  if (!targetPanel) {
-    return;
-  }
-
-  getElements("[data-settings-content]").forEach((panel) => {
-    panel.classList.remove("active");
-  });
-
-  targetPanel.classList.add("active");
-
-  getElements("[data-settings-panel]").forEach((button) => {
-    button.classList.toggle(
+const switchSettingsPanel = (
+  panelName
+) => {
+  getElements(
+    "[data-settings-content]"
+  ).forEach((panel) => {
+    panel.classList.toggle(
       "active",
-      button.dataset.settingsPanel === panelName
+      panel.dataset.settingsContent ===
+        panelName
     );
   });
 
-  appState.currentSettingsPanel = panelName;
+  getElements(
+    "[data-settings-panel]"
+  ).forEach((button) => {
+    button.classList.toggle(
+      "active",
+      button.dataset.settingsPanel ===
+        panelName
+    );
+  });
 };
 
 const collectSettings = () => ({
   companyName:
-    getElement("#company-name-input")?.value.trim() || "",
+    getElement(
+      "#company-name-input"
+    )?.value.trim() || "",
+
   companyEmail:
-    getElement("#company-email-input")?.value.trim() || "",
+    getElement(
+      "#company-email-input"
+    )?.value.trim() || "",
+
   companyPhone:
-    getElement("#company-phone-input")?.value.trim() || "",
+    getElement(
+      "#company-phone-input"
+    )?.value.trim() || "",
+
   companyAddress:
-    getElement("#company-address-input")?.value.trim() || "",
+    getElement(
+      "#company-address-input"
+    )?.value.trim() || "",
+
   defaultCurrency:
-    getElement("#default-currency-select")?.value || "CAD",
+    getElement(
+      "#default-currency-select"
+    )?.value || "CAD",
+
   quoteValidity:
-    Number(getElement("#quote-validity-input")?.value) || 30,
+    Number(
+      getElement(
+        "#quote-validity-input"
+      )?.value
+    ) || 30,
+
   pricingMethod:
-    getElement("#default-pricing-method")?.value || "margin",
+    getElement(
+      "#default-pricing-method"
+    )?.value || "margin",
+
   defaultMargin:
-    Number(getElement("#default-margin-input")?.value) || 25,
-  workingHours:
-    Number(getElement("#working-hours-input")?.value) || 8,
-  workingDays:
-    Number(getElement("#working-days-input")?.value) || 22,
-  reworkAllowance:
-    Number(getElement("#default-rework-input")?.value) || 2,
-  contingency:
-    Number(getElement("#default-contingency-input")?.value) || 3
+    Number(
+      getElement(
+        "#default-margin-input"
+      )?.value
+    ) || 25
 });
 
-const loadSavedSettings = () => {
-  const savedSettingsText =
-    localStorage.getItem(APP_STORAGE_KEYS.settings);
-
-  if (!savedSettingsText) {
-    return;
-  }
-
-  try {
-    const settings = JSON.parse(savedSettingsText);
-
-    const fieldValues = {
-      "#company-name-input": settings.companyName,
-      "#company-email-input": settings.companyEmail,
-      "#company-phone-input": settings.companyPhone,
-      "#company-address-input": settings.companyAddress,
-      "#default-currency-select": settings.defaultCurrency,
-      "#quote-validity-input": settings.quoteValidity,
-      "#default-pricing-method": settings.pricingMethod,
-      "#default-margin-input": settings.defaultMargin,
-      "#working-hours-input": settings.workingHours,
-      "#working-days-input": settings.workingDays,
-      "#default-rework-input": settings.reworkAllowance,
-      "#default-contingency-input": settings.contingency
-    };
-
-    Object.entries(fieldValues).forEach(
-      ([selector, value]) => {
-        const element = getElement(selector);
-
-        if (
-          element &&
-          value !== undefined &&
-          value !== null
-        ) {
-          element.value = value;
-        }
-      }
-    );
-  } catch (error) {
-    console.error("Unable to load saved settings:", error);
-  }
-};
-
 const saveSettings = () => {
-  const settings = collectSettings();
-
   localStorage.setItem(
-    APP_STORAGE_KEYS.settings,
-    JSON.stringify(settings)
+    STORAGE_KEYS.settings,
+    JSON.stringify(
+      collectSettings()
+    )
   );
 
-  showToast("Settings saved on this device.");
+  showToast(
+    "Settings saved on this device."
+  );
 };
 
 const initializeSettings = () => {
-  getElements("[data-settings-panel]").forEach((button) => {
-    safeAddEventListener(button, "click", () => {
-      switchSettingsPanel(button.dataset.settingsPanel);
-    });
+  getElements(
+    "[data-settings-panel]"
+  ).forEach((button) => {
+    safeAddEventListener(
+      button,
+      "click",
+      () => {
+        switchSettingsPanel(
+          button.dataset.settingsPanel
+        );
+      }
+    );
   });
 
   safeAddEventListener(
-    getElement("#save-settings-button"),
+    getElement(
+      "#save-settings-button"
+    ),
     "click",
     saveSettings
   );
-
-  loadSavedSettings();
 };
 
 /* =========================================================
-   16. PROJECT OPEN ACTIONS
+   30. PROJECT PREVIEW
 ========================================================= */
 
-const openProjectPreview = (projectId) => {
-  const project = demoData.projects.find(
-    (item) => item.id === projectId
-  );
+const openProjectPreview = (
+  projectId
+) => {
+  const project =
+    DEMO_PROJECTS.find(
+      (item) =>
+        item.id === projectId
+    );
 
   if (!project) {
-    showToast("Project information was not found.", "error");
     return;
   }
-
-  const monthlyValue =
-    project.volume * project.unitPrice;
 
   openModal({
     kicker: "PROJECT PREVIEW",
     title: project.name,
+
     content: `
       <div class="settings-form">
         <div class="form-field">
           <label>Customer</label>
-          <input value="${escapeHtml(project.customer)}" readonly>
+          <input
+            value="${escapeHtml(
+              project.customer
+            )}"
+            readonly
+          >
         </div>
 
         <div class="form-field">
           <label>Status</label>
-          <input value="${escapeHtml(project.status)}" readonly>
+          <input
+            value="${escapeHtml(
+              project.status
+            )}"
+            readonly
+          >
         </div>
 
         <div class="form-field">
@@ -1468,31 +2694,20 @@ const openProjectPreview = (projectId) => {
         <div class="form-field">
           <label>Unit Price</label>
           <input
-            value="${escapeHtml(formatCurrency(project.unitPrice))}"
-            readonly
-          >
-        </div>
-
-        <div class="form-field">
-          <label>Margin</label>
-          <input value="${project.margin}%" readonly>
-        </div>
-
-        <div class="form-field">
-          <label>Quoted Value</label>
-          <input
-            value="${escapeHtml(formatCurrency(monthlyValue))}"
+            value="${escapeHtml(
+              formatCurrency(
+                project.unitPrice,
+                "USD"
+              )
+            )}"
             readonly
           >
         </div>
       </div>
-
-      <p style="margin-top: 18px;">
-        The complete project workspace and Cost Canvas will be
-        connected in a later milestone.
-      </p>
     `,
+
     confirmText: "Open Projects",
+
     confirmHandler: () => {
       closeModal();
       navigateToPage("projects");
@@ -1500,271 +2715,163 @@ const openProjectPreview = (projectId) => {
   });
 };
 
-const initializeProjectOpenActions = () => {
-  getElements("[data-project-id]").forEach((button) => {
-    safeAddEventListener(button, "click", () => {
-      openProjectPreview(button.dataset.projectId);
-    });
+const initializeProjectActions = () => {
+  getElements(
+    "[data-project-id]"
+  ).forEach((button) => {
+    safeAddEventListener(
+      button,
+      "click",
+      () => {
+        openProjectPreview(
+          button.dataset.projectId
+        );
+      }
+    );
   });
 };
 
 /* =========================================================
-   17. TEMPLATE ACTIONS
-========================================================= */
-
-const initializeTemplateActions = () => {
-  getElements(".duplicate-template-button").forEach((button) => {
-    safeAddEventListener(button, "click", () => {
-      const templateCard = button.closest(".template-card");
-
-      const templateName =
-        templateCard?.querySelector("h3")?.textContent.trim() ||
-        "Template";
-
-      showToast(`${templateName} was duplicated in demo mode.`);
-    });
-  });
-
-  getElements(".edit-template-button").forEach((button) => {
-    safeAddEventListener(button, "click", () => {
-      const templateCard = button.closest(".template-card");
-
-      const templateName =
-        templateCard?.querySelector("h3")?.textContent.trim() ||
-        "Template";
-
-      openModal({
-        kicker: "TEMPLATE EDITOR",
-        title: templateName,
-        content: `
-          <p>
-            The full drag-and-drop template editor will be added in
-            Milestone 3.
-          </p>
-
-          <div class="form-field">
-            <label for="demo-template-name">Template Name</label>
-            <input
-              id="demo-template-name"
-              type="text"
-              value="${escapeHtml(templateName)}"
-            >
-          </div>
-        `,
-        confirmText: "Save Demo Change",
-        confirmHandler: () => {
-          closeModal();
-          showToast(
-            `${templateName} demo changes were accepted.`
-          );
-        }
-      });
-    });
-  });
-};
-
-/* =========================================================
-   18. GLOBAL SEARCH
-========================================================= */
-
-const initializeGlobalSearch = () => {
-  const globalSearchInput =
-    getElement("#global-search-input");
-
-  safeAddEventListener(
-    globalSearchInput,
-    "keydown",
-    (event) => {
-      if (event.key !== "Enter") {
-        return;
-      }
-
-      const searchValue = normalizeSearchValue(
-        globalSearchInput.value
-      );
-
-      if (!searchValue) {
-        return;
-      }
-
-      const matchedProject = demoData.projects.find(
-        (project) =>
-          normalizeSearchValue(project.name).includes(searchValue) ||
-          normalizeSearchValue(project.customer).includes(searchValue)
-      );
-
-      const matchedCost = demoData.costItems.find(
-        (costItem) =>
-          normalizeSearchValue(costItem.name).includes(searchValue)
-      );
-
-      const matchedTemplate = demoData.templates.find(
-        (template) =>
-          normalizeSearchValue(template.name).includes(searchValue)
-      );
-
-      if (matchedProject) {
-        navigateToPage("projects");
-
-        const projectSearchInput =
-          getElement("#project-search-input");
-
-        if (projectSearchInput) {
-          projectSearchInput.value = globalSearchInput.value;
-          filterProjectCards();
-        }
-
-        showToast(`Project result: ${matchedProject.name}`);
-        return;
-      }
-
-      if (matchedCost) {
-        navigateToPage("cost-pool");
-
-        const costSearchInput =
-          getElement("#cost-pool-search-input");
-
-        if (costSearchInput) {
-          costSearchInput.value = globalSearchInput.value;
-          filterCostCards();
-        }
-
-        showToast(`Cost result: ${matchedCost.name}`);
-        return;
-      }
-
-      if (matchedTemplate) {
-        navigateToPage("templates");
-        showToast(`Template result: ${matchedTemplate.name}`);
-        return;
-      }
-
-      showToast("No matching project, cost, or template was found.", "warning");
-    }
-  );
-
-  document.addEventListener("keydown", (event) => {
-    const isShortcut =
-      (event.ctrlKey || event.metaKey) &&
-      event.key.toLowerCase() === "k";
-
-    if (!isShortcut) {
-      return;
-    }
-
-    event.preventDefault();
-
-    if (globalSearchInput) {
-      globalSearchInput.focus();
-      globalSearchInput.select();
-    }
-  });
-};
-
-/* =========================================================
-   19. BACKUP AND RESTORE
+   31. BACKUP AND RESTORE
 ========================================================= */
 
 const createBackupPayload = () => ({
-  application: "Refurbishment Quote System",
-  version: "1.0.0-milestone-1",
-  exportedAt: new Date().toISOString(),
-  theme: appState.currentTheme,
-  sidebarCollapsed: appState.sidebarCollapsed,
-  settings: collectSettings(),
-  demoData
+  application:
+    "Refurbishment Quote System",
+
+  version:
+    "2.0.0-cost-pool",
+
+  exportedAt:
+    new Date().toISOString(),
+
+  theme:
+    appState.currentTheme,
+
+  sidebarCollapsed:
+    appState.sidebarCollapsed,
+
+  settings:
+    collectSettings(),
+
+  costCategories:
+    appState.costCategories,
+
+  costItems:
+    appState.costItems
 });
 
-const downloadJsonFile = (data, filename) => {
-  const jsonText = JSON.stringify(data, null, 2);
-  const blob = new Blob([jsonText], {
-    type: "application/json"
-  });
+const downloadJsonFile = (
+  data,
+  filename
+) => {
+  const blob = new Blob(
+    [JSON.stringify(data, null, 2)],
+    {
+      type: "application/json"
+    }
+  );
 
-  const temporaryUrl = URL.createObjectURL(blob);
-  const downloadLink = document.createElement("a");
+  const objectUrl =
+    URL.createObjectURL(blob);
 
-  downloadLink.href = temporaryUrl;
-  downloadLink.download = filename;
+  const link =
+    document.createElement("a");
 
-  document.body.appendChild(downloadLink);
-  downloadLink.click();
-  downloadLink.remove();
+  link.href = objectUrl;
+  link.download = filename;
 
-  URL.revokeObjectURL(temporaryUrl);
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  URL.revokeObjectURL(objectUrl);
 };
 
 const exportBackup = () => {
-  const dateText = new Date()
-    .toISOString()
-    .slice(0, 10);
+  const dateText =
+    new Date()
+      .toISOString()
+      .slice(0, 10);
 
   downloadJsonFile(
     createBackupPayload(),
     `refurbishment-quote-system-backup-${dateText}.json`
   );
 
-  showToast("Backup file exported.");
+  showToast(
+    "Backup file exported."
+  );
 };
 
-const importBackupFile = async (file) => {
+const importBackupFile = async (
+  file
+) => {
   if (!file) {
     return;
   }
 
   try {
-    const fileText = await file.text();
-    const importedData = JSON.parse(fileText);
+    const text =
+      await file.text();
+
+    const data =
+      JSON.parse(text);
 
     if (
-      !importedData ||
-      importedData.application !==
-        "Refurbishment Quote System"
+      data.application !==
+      "Refurbishment Quote System"
     ) {
-      throw new Error("Invalid backup file.");
-    }
-
-    if (importedData.settings) {
-      localStorage.setItem(
-        APP_STORAGE_KEYS.settings,
-        JSON.stringify(importedData.settings)
-      );
-    }
-
-    if (importedData.theme) {
-      localStorage.setItem(
-        APP_STORAGE_KEYS.theme,
-        importedData.theme
+      throw new Error(
+        "Invalid backup"
       );
     }
 
     if (
-      typeof importedData.sidebarCollapsed === "boolean"
+      Array.isArray(
+        data.costCategories
+      )
+    ) {
+      appState.costCategories =
+        data.costCategories;
+    }
+
+    if (
+      Array.isArray(data.costItems)
+    ) {
+      appState.costItems =
+        data.costItems;
+    }
+
+    if (data.theme) {
+      applyTheme(data.theme);
+    }
+
+    if (
+      data.settings &&
+      typeof data.settings === "object"
     ) {
       localStorage.setItem(
-        APP_STORAGE_KEYS.sidebarCollapsed,
-        String(importedData.sidebarCollapsed)
+        STORAGE_KEYS.settings,
+        JSON.stringify(
+          data.settings
+        )
       );
     }
+
+    saveCostPoolData();
+    renderCostPool();
 
     showToast(
-      "Backup imported. Reload the page to apply all settings."
+      "Backup imported successfully."
     );
   } catch (error) {
-    console.error("Backup import failed:", error);
+    console.error(error);
+
     showToast(
-      "The selected file is not a valid system backup.",
+      "The selected file is not a valid backup.",
       "error"
     );
-  }
-};
-
-const triggerBackupImport = () => {
-  const fileInput = getElement("#backup-file-input");
-
-  if (fileInput) {
-    fileInput.value = "";
-    fileInput.click();
   }
 };
 
@@ -1787,78 +2894,101 @@ const initializeBackupActions = () => {
     safeAddEventListener(
       getElement(selector),
       "click",
-      triggerBackupImport
+      () => {
+        const fileInput =
+          getElement(
+            "#backup-file-input"
+          );
+
+        if (fileInput) {
+          fileInput.value = "";
+          fileInput.click();
+        }
+      }
     );
   });
 
   safeAddEventListener(
-    getElement("#backup-file-input"),
+    getElement(
+      "#backup-file-input"
+    ),
     "change",
     (event) => {
-      const selectedFile = event.target.files?.[0];
-      importBackupFile(selectedFile);
+      importBackupFile(
+        event.target.files?.[0]
+      );
     }
   );
 };
 
 /* =========================================================
-   20. RESET LOCAL DATA
+   32. RESET LOCAL DATA
 ========================================================= */
-
-const resetLocalData = () => {
-  openModal({
-    kicker: "DANGER ZONE",
-    title: "Reset Local Data",
-    content: `
-      <p>
-        This will remove saved theme, sidebar and settings data
-        from this browser.
-      </p>
-
-      <p>
-        The demonstration information inside the HTML will remain
-        available.
-      </p>
-    `,
-    confirmText: "Reset Local Data",
-    confirmHandler: () => {
-      Object.values(APP_STORAGE_KEYS).forEach((storageKey) => {
-        localStorage.removeItem(storageKey);
-      });
-
-      closeModal();
-      showToast("Local data was reset.", "warning");
-
-      window.setTimeout(() => {
-        window.location.reload();
-      }, 700);
-    }
-  });
-};
 
 const initializeResetAction = () => {
   safeAddEventListener(
-    getElement("#reset-local-data-button"),
+    getElement(
+      "#reset-local-data-button"
+    ),
     "click",
-    resetLocalData
+    () => {
+      openModal({
+        kicker: "DANGER ZONE",
+        title: "Reset Local Data",
+
+        content: `
+          <p>
+            This will permanently remove saved Cost Pool items,
+            custom categories and local settings from this browser.
+          </p>
+        `,
+
+        confirmText: "Reset Local Data",
+
+        confirmHandler: () => {
+          Object.values(
+            STORAGE_KEYS
+          ).forEach((key) => {
+            localStorage.removeItem(key);
+          });
+
+          closeModal();
+
+          showToast(
+            "Local data was reset.",
+            "warning"
+          );
+
+          window.setTimeout(() => {
+            window.location.reload();
+          }, 600);
+        }
+      });
+    }
   );
 };
 
 /* =========================================================
-   21. GENERAL DEMONSTRATION ACTIONS
+   33. GENERAL ACTIONS
 ========================================================= */
 
 const initializeGeneralActions = () => {
   safeAddEventListener(
-    getElement("#notification-button"),
+    getElement(
+      "#notification-button"
+    ),
     "click",
     () => {
-      showToast("You have no new critical notifications.");
+      showToast(
+        "You have no critical notifications."
+      );
     }
   );
 
   safeAddEventListener(
-    getElement("#user-profile-button"),
+    getElement(
+      "#user-profile-button"
+    ),
     "click",
     () => {
       navigateToPage("settings");
@@ -1867,120 +2997,274 @@ const initializeGeneralActions = () => {
   );
 
   safeAddEventListener(
-    getElement("#export-report-button"),
+    getElement(
+      "#export-report-button"
+    ),
     "click",
     () => {
-      const reportData = {
-        exportedAt: new Date().toISOString(),
-        projects: demoData.projects,
-        totalQuotedValue: 148600,
-        averageMargin: 27.4
-      };
-
       downloadJsonFile(
-        reportData,
+        {
+          exportedAt:
+            new Date().toISOString(),
+
+          projects:
+            DEMO_PROJECTS,
+
+          costItems:
+            appState.costItems
+        },
+
         "refurbishment-report.json"
       );
 
-      showToast("Report data exported.");
+      showToast(
+        "Report exported."
+      );
     }
   );
 
-  safeAddEventListener(
-    getElement("#dashboard-cost-project-select"),
-    "change",
-    (event) => {
-      const selectedProject = demoData.projects.find(
-        (project) => project.id === event.target.value
-      );
-
-      if (selectedProject) {
+  [
+    "#new-quote-button",
+    "#dashboard-create-quote-button",
+    "#quick-new-project-button",
+    "#projects-create-project-button"
+  ].forEach((selector) => {
+    safeAddEventListener(
+      getElement(selector),
+      "click",
+      () => {
         showToast(
-          `Cost preview changed to ${selectedProject.name}.`
+          "The full Project Builder will be added in Milestone 4."
         );
       }
+    );
+  });
+
+  [
+    "#create-template-button",
+    "#empty-create-template-button"
+  ].forEach((selector) => {
+    safeAddEventListener(
+      getElement(selector),
+      "click",
+      () => {
+        navigateToPage("templates");
+
+        showToast(
+          "The editable Template Builder will be added next."
+        );
+      }
+    );
+  });
+
+  safeAddEventListener(
+    getElement(
+      "#add-customer-button"
+    ),
+    "click",
+    () => {
+      showToast(
+        "Customer creation will be connected in the Customer milestone."
+      );
     }
   );
-
-  getElements(".row-menu-button").forEach((button) => {
-    safeAddEventListener(button, "click", (event) => {
-      event.stopPropagation();
-      showToast(
-        "Additional item actions will be added in the next milestone."
-      );
-    });
-  });
 };
 
 /* =========================================================
-   22. KEYBOARD SHORTCUTS
+   34. GLOBAL SEARCH
+========================================================= */
+
+const initializeGlobalSearch = () => {
+  const searchInput =
+    getElement(
+      "#global-search-input"
+    );
+
+  safeAddEventListener(
+    searchInput,
+    "keydown",
+    (event) => {
+      if (event.key !== "Enter") {
+        return;
+      }
+
+      const value =
+        normalizeSearchValue(
+          searchInput.value
+        );
+
+      if (!value) {
+        return;
+      }
+
+      const matchingCost =
+        appState.costItems.find(
+          (item) =>
+            normalizeSearchValue(
+              item.name
+            ).includes(value)
+        );
+
+      if (matchingCost) {
+        navigateToPage("cost-pool");
+
+        const costSearch =
+          getElement(
+            "#cost-pool-search-input"
+          );
+
+        if (costSearch) {
+          costSearch.value =
+            searchInput.value;
+
+          appState.costSearchText =
+            searchInput.value;
+
+          renderCostCards();
+        }
+
+        return;
+      }
+
+      const matchingProject =
+        DEMO_PROJECTS.find(
+          (project) =>
+            normalizeSearchValue(
+              project.name
+            ).includes(value) ||
+            normalizeSearchValue(
+              project.customer
+            ).includes(value)
+        );
+
+      if (matchingProject) {
+        navigateToPage("projects");
+
+        const projectSearch =
+          getElement(
+            "#project-search-input"
+          );
+
+        if (projectSearch) {
+          projectSearch.value =
+            searchInput.value;
+
+          filterProjectCards();
+        }
+
+        return;
+      }
+
+      showToast(
+        "No matching result was found.",
+        "warning"
+      );
+    }
+  );
+
+  document.addEventListener(
+    "keydown",
+    (event) => {
+      const shortcut =
+        (event.ctrlKey ||
+          event.metaKey) &&
+        event.key.toLowerCase() === "k";
+
+      if (!shortcut) {
+        return;
+      }
+
+      event.preventDefault();
+
+      searchInput?.focus();
+      searchInput?.select();
+    }
+  );
+};
+
+/* =========================================================
+   35. KEYBOARD SHORTCUTS
 ========================================================= */
 
 const initializeKeyboardShortcuts = () => {
-  document.addEventListener("keydown", (event) => {
-    const targetTag =
-      event.target?.tagName?.toLowerCase();
+  document.addEventListener(
+    "keydown",
+    (event) => {
+      const tagName =
+        event.target?.tagName
+          ?.toLowerCase();
 
-    const isTyping =
-      targetTag === "input" ||
-      targetTag === "textarea" ||
-      targetTag === "select";
+      const isTyping =
+        tagName === "input" ||
+        tagName === "textarea" ||
+        tagName === "select";
 
-    if (isTyping) {
-      return;
-    }
+      if (isTyping) {
+        return;
+      }
 
-    const commandKey = event.ctrlKey || event.metaKey;
+      const commandKey =
+        event.ctrlKey ||
+        event.metaKey;
 
-    if (commandKey && event.key.toLowerCase() === "n") {
-      event.preventDefault();
-      openNewProjectModal();
-    }
+      if (
+        commandKey &&
+        event.key.toLowerCase() === "s"
+      ) {
+        event.preventDefault();
 
-    if (commandKey && event.key.toLowerCase() === "s") {
-      event.preventDefault();
+        if (
+          appState.currentPage ===
+          "settings"
+        ) {
+          saveSettings();
+        } else {
+          saveCostPoolData();
 
-      if (appState.currentPage === "settings") {
-        saveSettings();
-      } else {
-        showToast(
-          "Current work is stored in demonstration mode."
-        );
+          showToast(
+            "Current browser data was saved."
+          );
+        }
       }
     }
-  });
+  );
 };
 
 /* =========================================================
-   23. APPLICATION INITIALIZATION
+   36. APPLICATION INITIALIZATION
 ========================================================= */
 
 const initializeApplication = () => {
+  loadCostPoolData();
+
   initializeTheme();
   initializeSidebar();
   initializeNavigation();
   initializeModal();
-  initializeCreateActions();
+
+  initializeCostPoolEvents();
   initializeProjectFilters();
-  initializeCostPoolFilters();
-  initializeCustomerSearch();
   initializeSettings();
-  initializeProjectOpenActions();
-  initializeTemplateActions();
-  initializeGlobalSearch();
+  initializeProjectActions();
+
   initializeBackupActions();
   initializeResetAction();
   initializeGeneralActions();
+  initializeGlobalSearch();
   initializeKeyboardShortcuts();
+
+  renderCostPool();
 
   navigateToPage("dashboard");
 
   console.info(
-    "Refurbishment Quote System Milestone 1 initialized."
+    "Refurbishment Quote System Milestone 2 initialized."
   );
 };
 
-if (document.readyState === "loading") {
+if (
+  document.readyState === "loading"
+) {
   document.addEventListener(
     "DOMContentLoaded",
     initializeApplication
