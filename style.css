@@ -2874,4 +2874,415 @@ body.sidebar-collapsed .user-profile-button {
     color: #000000;
     background: #ffffff;
   }
+/* =========================================================
+   MILESTONE 2 — EDITABLE COST POOL
+========================================================= */
+
+.cost-pool-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.cost-summary-card {
+  min-height: 145px;
+}
+
+.cost-summary-date {
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.cost-pool-layout {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.category-panel {
+  position: sticky;
+  top: 88px;
+  padding: 18px;
+}
+
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.category-item {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--text-secondary);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.category-item:hover {
+  background: var(--surface-soft);
+  color: var(--text-primary);
+  transform: translateX(2px);
+}
+
+.category-item.active {
+  background: var(--accent-soft);
+  border-color: var(--accent-border);
+  color: var(--text-primary);
+}
+
+.category-icon {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: var(--surface-soft);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.category-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.category-count {
+  min-width: 28px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--surface-soft);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.category-item.active .category-count {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.category-add-button {
+  width: 100%;
+  margin-top: 16px;
+  padding: 11px 12px;
+  border: 1px dashed var(--border-color);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.category-add-button:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--text-primary);
+}
+
+.cost-items-panel {
+  min-width: 0;
+  padding: 18px;
+}
+
+.cost-results-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 4px 2px 16px;
+}
+
+.cost-results-bar p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.cost-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.cost-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  background: var(--surface-card);
+  box-shadow: var(--shadow-soft);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.cost-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-border);
+  box-shadow: var(--shadow-medium);
+}
+
+.cost-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.cost-card-category {
+  display: inline-flex;
+  align-items: center;
+  min-height: 25px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.cost-card-main {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.cost-card-icon {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 13px;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+}
+
+.cost-card-main h3 {
+  margin: 0 0 6px;
+  color: var(--text-primary);
+  font-size: 17px;
+  line-height: 1.3;
+}
+
+.cost-card-main p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.cost-card-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.cost-card-details div {
+  min-width: 0;
+  padding: 11px 12px;
+  border-radius: 12px;
+  background: var(--surface-soft);
+}
+
+.cost-card-details dt {
+  margin-bottom: 5px;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.cost-card-details dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.cost-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-color);
+}
+
+.cost-card-footer > span {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.cost-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.delete-cost-button {
+  color: var(--danger);
+}
+
+.delete-cost-button:hover {
+  color: var(--danger);
+  background: var(--danger-soft);
+}
+
+.empty-state[hidden] {
+  display: none;
+}
+
+#cost-pool-empty-state {
+  min-height: 340px;
+  margin-top: 4px;
+}
+
+.cost-card-category.labour,
+.cost-card-icon.labour,
+.category-labour {
+  background: rgba(66, 133, 244, 0.14);
+  color: #71a7ff;
+}
+
+.cost-card-category.parts,
+.cost-card-icon.parts,
+.category-parts {
+  background: rgba(52, 168, 83, 0.14);
+  color: #66d78a;
+}
+
+.cost-card-category.packaging,
+.cost-card-icon.packaging,
+.category-packaging {
+  background: rgba(168, 85, 247, 0.14);
+  color: #c18cff;
+}
+
+.cost-card-category.logistics,
+.cost-card-icon.logistics,
+.category-logistics {
+  background: rgba(249, 115, 22, 0.14);
+  color: #ff9b5b;
+}
+
+.cost-card-category.equipment,
+.cost-card-icon.equipment,
+.category-equipment {
+  background: rgba(236, 72, 153, 0.14);
+  color: #ff83bf;
+}
+
+.cost-card-category.overhead,
+.cost-card-icon.overhead,
+.category-overhead {
+  background: rgba(148, 163, 184, 0.14);
+  color: var(--text-secondary);
+}
+
+/* Light theme Cost Pool refinements */
+
+.light-theme .cost-card {
+  background: #ffffff;
+}
+
+.light-theme .category-item:hover,
+.light-theme .cost-card-details div {
+  background: rgba(15, 23, 42, 0.04);
+}
+
+/* Responsive Cost Pool layout */
+
+@media (max-width: 1220px) {
+  .cost-pool-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cost-card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .cost-pool-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .category-panel {
+    position: static;
+  }
+
+  .category-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .cost-pool-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .category-list {
+    grid-template-columns: 1fr;
+  }
+
+  .cost-card-details {
+    grid-template-columns: 1fr;
+  }
+
+  .cost-card-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .cost-card-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .cost-results-bar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }
