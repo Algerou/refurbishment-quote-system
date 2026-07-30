@@ -1,7 +1,13 @@
-/* =========================================================
-   REFURBISHMENT QUOTE SYSTEM
-   COMPLETE APPLICATION STYLESHEET
-========================================================= */
+/*
+===========================================================
+REFURBISHMENT QUOTATION SYSTEM (RQS)
+Version   : 4.0.0
+Module    : Core Application Styles
+Technology: CSS3
+Deployment: GitHub Pages
+File      : assets/css/rqs-app.css
+===========================================================
+*/
 
 /* =========================================================
    1. ROOT VARIABLES
@@ -2877,7 +2883,7 @@ body.sidebar-collapsed .user-profile-button {
 }
 
 /* =========================================================
-   MILESTONE 2 — EDITABLE COST POOL
+   RQS 4.0 — EDITABLE COST POOL
 ========================================================= */
 
 .cost-pool-summary-grid {
@@ -3291,7 +3297,7 @@ body.sidebar-collapsed .user-profile-button {
 
 
 /* =========================================================
-   MILESTONE 3 — REVENUE LIBRARY
+   RQS 4.0 — REVENUE LIBRARY
 ========================================================= */
 
 .revenue-summary-grid,
@@ -4187,7 +4193,7 @@ body.sidebar-collapsed .user-profile-button {
 }
 
 /* =========================================================
-   MILESTONE 4 PRINT ADDITIONS
+   RQS 4.0 PRINT ADDITIONS
 ========================================================= */
 
 @media print {
