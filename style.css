@@ -2874,6 +2874,8 @@ body.sidebar-collapsed .user-profile-button {
     color: #000000;
     background: #ffffff;
   }
+}
+
 /* =========================================================
    MILESTONE 2 — EDITABLE COST POOL
 ========================================================= */
@@ -2935,7 +2937,7 @@ body.sidebar-collapsed .user-profile-button {
 }
 
 .category-item:hover {
-  background: var(--surface-soft);
+  background: var(--bg-panel-secondary);
   color: var(--text-primary);
   transform: translateX(2px);
 }
@@ -2953,7 +2955,7 @@ body.sidebar-collapsed .user-profile-button {
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  background: var(--surface-soft);
+  background: var(--bg-panel-secondary);
   color: var(--text-primary);
   font-size: 12px;
   font-weight: 800;
@@ -2973,7 +2975,7 @@ body.sidebar-collapsed .user-profile-button {
   min-width: 28px;
   padding: 3px 8px;
   border-radius: 999px;
-  background: var(--surface-soft);
+  background: var(--bg-panel-secondary);
   color: var(--text-muted);
   font-size: 12px;
   font-weight: 700;
@@ -3041,8 +3043,8 @@ body.sidebar-collapsed .user-profile-button {
   padding: 18px;
   border: 1px solid var(--border-color);
   border-radius: 16px;
-  background: var(--surface-card);
-  box-shadow: var(--shadow-soft);
+  background: var(--bg-panel);
+  box-shadow: var(--shadow-small);
   transition:
     transform 0.2s ease,
     border-color 0.2s ease,
@@ -3119,7 +3121,7 @@ body.sidebar-collapsed .user-profile-button {
   min-width: 0;
   padding: 11px 12px;
   border-radius: 12px;
-  background: var(--surface-soft);
+  background: var(--bg-panel-secondary);
 }
 
 .cost-card-details dt {
@@ -3284,5 +3286,930 @@ body.sidebar-collapsed .user-profile-button {
   .cost-results-bar {
     align-items: flex-start;
     flex-direction: column;
+  }
+}
+
+
+/* =========================================================
+   MILESTONE 3 — REVENUE LIBRARY
+========================================================= */
+
+.revenue-summary-grid,
+.project-summary-grid,
+.template-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.revenue-summary-card,
+.project-summary-card,
+.template-summary-card {
+  min-height: 145px;
+}
+
+.revenue-summary-date,
+.project-summary-money {
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.revenue-library-layout {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.revenue-category-panel {
+  position: sticky;
+  top: 88px;
+  padding: 18px;
+}
+
+.revenue-category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.revenue-items-panel {
+  min-width: 0;
+  padding: 18px;
+}
+
+.revenue-results-bar,
+.project-results-bar,
+.template-results-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 4px 2px 16px;
+}
+
+.revenue-results-bar p,
+.project-results-bar p,
+.template-results-bar p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.revenue-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.revenue-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  padding: 18px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: var(--shadow-small);
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+.revenue-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-border);
+  box-shadow: var(--shadow-medium);
+}
+
+.revenue-card-header,
+.revenue-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.revenue-card-category {
+  display: inline-flex;
+  min-height: 25px;
+  align-items: center;
+  padding: 4px 9px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  border-radius: 999px;
+}
+
+.revenue-card-main {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  margin-top: 16px;
+}
+
+.revenue-card-icon {
+  display: inline-flex;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 900;
+  border-radius: 13px;
+}
+
+.revenue-card-main h3 {
+  margin: 0 0 6px;
+  font-size: 17px;
+  line-height: 1.3;
+}
+
+.revenue-card-main p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.revenue-card-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.revenue-card-details div {
+  min-width: 0;
+  padding: 11px 12px;
+  background: var(--bg-panel-secondary);
+  border-radius: 12px;
+}
+
+.revenue-card-details dt {
+  margin-bottom: 5px;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.revenue-card-details dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.revenue-card-footer {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-color);
+}
+
+.revenue-card-footer > span {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.revenue-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.delete-revenue-button {
+  color: var(--danger);
+}
+
+.revenue-card-category.service,
+.revenue-card-icon.service,
+.category-service {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.revenue-card-category.product,
+.revenue-card-icon.product,
+.category-product {
+  color: var(--info);
+  background: var(--info-soft);
+}
+
+.revenue-card-category.logistics,
+.revenue-card-icon.logistics,
+.category-logistics {
+  color: var(--warning);
+  background: var(--warning-soft);
+}
+
+.revenue-card-category.warranty,
+.revenue-card-icon.warranty,
+.category-warranty {
+  color: var(--purple);
+  background: var(--purple-soft);
+}
+
+.revenue-card-category.storage,
+.revenue-card-icon.storage,
+.category-storage {
+  color: var(--pink);
+  background: var(--pink-soft);
+}
+
+.revenue-card-category.other,
+.revenue-card-icon.other,
+.category-other {
+  color: var(--text-secondary);
+  background: rgba(148, 163, 184, .14);
+}
+
+/* =========================================================
+   PROJECT LIST AND PROJECT EDITOR
+========================================================= */
+
+.project-list-panel {
+  padding: 18px;
+}
+
+.project-editor-header,
+.template-editor-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 22px;
+  margin-bottom: 22px;
+}
+
+.project-editor-heading,
+.template-editor-heading {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.project-editor-heading h2,
+.template-editor-heading h2 {
+  margin: 0 0 6px;
+  font-size: clamp(25px, 3vw, 34px);
+}
+
+.project-editor-actions,
+.template-editor-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+
+.project-save-status {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.project-editor-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.project-editor-tab {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 11px;
+  min-height: 72px;
+  padding: 12px;
+  color: var(--text-secondary);
+  text-align: left;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-medium);
+}
+
+.project-editor-tab:hover {
+  color: var(--text-primary);
+  background: var(--bg-panel-hover);
+}
+
+.project-editor-tab.active {
+  color: var(--text-primary);
+  background: var(--accent-soft);
+  border-color: var(--accent-border);
+}
+
+.project-tab-number {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  place-items: center;
+  color: var(--text-secondary);
+  font-weight: 800;
+  background: var(--bg-panel-secondary);
+  border-radius: 10px;
+}
+
+.project-editor-tab.active .project-tab-number {
+  color: #fff;
+  background: var(--accent);
+}
+
+.project-editor-tab > span:last-child {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.project-editor-tab strong {
+  font-size: 13px;
+}
+
+.project-editor-tab small {
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-editor-layout {
+  min-width: 0;
+}
+
+.project-editor-panel {
+  display: none;
+}
+
+.project-editor-panel.active {
+  display: block;
+}
+
+.project-information-form {
+  margin-top: 4px;
+}
+
+.project-panel-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.project-selection-header p {
+  max-width: 680px;
+  margin: 5px 0 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.project-selected-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.project-selection-empty {
+  display: flex;
+  min-height: 285px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  color: var(--text-secondary);
+  text-align: center;
+  background: var(--bg-panel-secondary);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-medium);
+}
+
+.project-selection-empty-icon {
+  display: grid;
+  width: 54px;
+  height: 54px;
+  place-items: center;
+  margin-bottom: 12px;
+  color: var(--accent);
+  font-size: 24px;
+  background: var(--accent-soft);
+  border-radius: 16px;
+}
+
+.project-selection-empty h4 {
+  margin: 0 0 6px;
+  font-size: 16px;
+}
+
+.project-selection-empty p {
+  max-width: 520px;
+  margin: 0 0 16px;
+  color: var(--text-muted);
+}
+
+.project-summary-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 18px;
+}
+
+.project-summary-list,
+.project-summary-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* =========================================================
+   MILESTONE 4 — OPPORTUNITY TEMPLATE LIBRARY
+========================================================= */
+
+.template-library-panel {
+  padding: 18px;
+}
+
+.template-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.template-card {
+  overflow: hidden;
+}
+
+.template-card-header {
+  gap: 12px;
+}
+
+.template-status-badge,
+.template-card-status {
+  display: inline-flex;
+  min-height: 24px;
+  align-items: center;
+  padding: 0 9px;
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 750;
+  background: var(--accent-soft);
+  border-radius: 999px;
+}
+
+.template-status-badge.archived,
+.template-card-status.archived {
+  color: var(--text-muted);
+  background: var(--bg-panel-secondary);
+}
+
+.template-step-preview {
+  list-style: none;
+  padding: 12px;
+}
+
+.template-step-preview li {
+  position: relative;
+  padding-left: 19px;
+}
+
+.template-step-preview li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.template-step-preview .more-steps::before {
+  content: "+";
+}
+
+.template-card-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Template editor */
+
+.template-editor-layout {
+  display: grid;
+  grid-template-columns: 310px minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.template-editor-sidebar {
+  position: sticky;
+  top: 88px;
+}
+
+.template-settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.template-settings-form .form-field input,
+.template-settings-form .form-field select {
+  height: 42px;
+  padding: 0 11px;
+}
+
+.template-settings-form .form-field textarea {
+  min-height: 110px;
+  padding: 11px;
+  resize: vertical;
+}
+
+.template-editor-stat-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  margin-top: 18px;
+  overflow: hidden;
+  background: var(--border-soft);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-medium);
+}
+
+.template-editor-stat-list > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 12px;
+  background: var(--bg-panel-secondary);
+}
+
+.template-editor-stat-list span {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.template-editor-stat-list strong {
+  font-size: 14px;
+}
+
+.template-editor-workspace {
+  min-width: 0;
+}
+
+.template-builder-header {
+  align-items: flex-start;
+}
+
+.template-builder-header p {
+  max-width: 680px;
+  margin: 5px 0 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.template-section-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.template-section-card,
+.template-section {
+  overflow: hidden;
+  background: var(--bg-panel-secondary);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-medium);
+}
+
+.template-section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 15px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.template-section-heading {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  gap: 11px;
+}
+
+.template-section-number,
+.section-drag-handle {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  place-items: center;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 800;
+  background: var(--accent-soft);
+  border-radius: 10px;
+}
+
+.template-section-title {
+  margin: 0 0 4px;
+  font-size: 15px;
+}
+
+.template-section-description {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.template-section-actions,
+.template-question-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.template-section-body {
+  padding: 12px;
+}
+
+.template-question-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.template-question-row,
+.template-question-card {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  gap: 11px;
+  align-items: center;
+  min-width: 0;
+  padding: 11px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-small);
+}
+
+.template-question-type-icon,
+.question-drag-handle {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  color: var(--info);
+  font-size: 11px;
+  font-weight: 800;
+  background: var(--info-soft);
+  border-radius: 9px;
+}
+
+.template-question-content {
+  min-width: 0;
+}
+
+.template-question-content strong {
+  display: block;
+  overflow: hidden;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.template-question-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 10px;
+  margin-top: 3px;
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+.required-badge,
+.question-required-badge {
+  display: inline-flex;
+  min-height: 20px;
+  align-items: center;
+  padding: 0 7px;
+  color: var(--danger);
+  font-size: 9px;
+  font-weight: 800;
+  background: var(--danger-soft);
+  border-radius: 999px;
+}
+
+.optional-badge,
+.question-optional-badge {
+  display: inline-flex;
+  min-height: 20px;
+  align-items: center;
+  padding: 0 7px;
+  color: var(--text-muted);
+  font-size: 9px;
+  font-weight: 800;
+  background: var(--bg-panel-secondary);
+  border-radius: 999px;
+}
+
+.add-template-question-button,
+.template-add-question-button {
+  display: flex;
+  width: 100%;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 10px;
+  color: var(--accent);
+  font-weight: 700;
+  background: transparent;
+  border: 1px dashed var(--accent-border);
+  border-radius: var(--radius-small);
+}
+
+.add-template-question-button:hover,
+.template-add-question-button:hover {
+  background: var(--accent-soft);
+}
+
+.template-builder-empty-state {
+  min-height: 360px;
+}
+
+.empty-state {
+  display: flex;
+  min-height: 300px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  text-align: center;
+}
+
+.empty-state-icon {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  place-items: center;
+  margin-bottom: 13px;
+  color: var(--accent);
+  font-size: 24px;
+  background: var(--accent-soft);
+  border-radius: 17px;
+}
+
+.empty-state h3 {
+  margin: 0 0 7px;
+}
+
+.empty-state p {
+  max-width: 520px;
+  margin: 0 0 17px;
+  color: var(--text-muted);
+}
+
+/* =========================================================
+   MILESTONE 4 RESPONSIVE RULES
+========================================================= */
+
+@media (max-width: 1250px) {
+  .revenue-summary-grid,
+  .project-summary-grid,
+  .template-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .revenue-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .template-editor-layout {
+    grid-template-columns: 270px minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 1000px) {
+  .revenue-library-layout,
+  .template-editor-layout,
+  .project-summary-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .revenue-category-panel,
+  .template-editor-sidebar {
+    position: static;
+  }
+
+  .revenue-category-list {
+    min-width: max-content;
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .project-editor-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .project-editor-header,
+  .template-editor-header {
+    flex-direction: column;
+  }
+
+  .project-editor-actions,
+  .template-editor-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .project-editor-tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .template-section-header,
+  .template-builder-header {
+    flex-direction: column;
+  }
+
+  .template-section-actions {
+    width: 100%;
+  }
+
+  .template-question-row,
+  .template-question-card {
+    grid-template-columns: 34px minmax(0, 1fr);
+  }
+
+  .template-question-actions {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 640px) {
+  .revenue-summary-grid,
+  .project-summary-grid,
+  .template-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .revenue-card-details {
+    grid-template-columns: 1fr;
+  }
+
+  .revenue-results-bar,
+  .project-results-bar,
+  .template-results-bar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .project-editor-heading,
+  .template-editor-heading {
+    flex-direction: column;
+  }
+
+  .project-editor-actions .primary-button,
+  .project-editor-actions .secondary-button,
+  .project-editor-actions .danger-button,
+  .template-editor-actions .primary-button,
+  .template-editor-actions .secondary-button,
+  .template-editor-actions .danger-button {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   MILESTONE 4 PRINT ADDITIONS
+========================================================= */
+
+@media print {
+  .project-editor-tabs,
+  .project-panel-navigation,
+  .project-editor-actions,
+  .template-editor-actions,
+  .template-section-actions,
+  .template-question-actions,
+  .add-template-question-button,
+  .template-add-question-button,
+  .category-add-button {
+    display: none !important;
+  }
+
+  .template-editor-layout,
+  .project-summary-layout {
+    display: block;
+  }
+
+  .template-editor-sidebar {
+    position: static;
+    margin-bottom: 16px;
   }
 }
